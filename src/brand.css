@@ -49,3 +49,6 @@
 .brand-logo{background:#fff;mix-blend-mode:normal}
 .brand-logo img{filter:grayscale(1) contrast(1.35) brightness(1.1)}
 .wordmark,.booking-banner .monogram{background:#fff}
+/* Let the page surface show through the white logo background. */
+.brand-logo{background:transparent;mix-blend-mode:multiply}
+.wordmark,.booking-banner .monogram{background:transparent}
