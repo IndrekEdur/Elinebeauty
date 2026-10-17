@@ -27,7 +27,7 @@ export default function App() {
       <section className="section" id="teenused">
         <SectionHeading eyebrow="01 / MEIE TEENUSED" title={<>Hoolitsus, mis lähtub <em>sinust.</em></>}>Igapäevasest ilurituaalist erilise hetkeni. Leia enda jaoks sobiv hoolitsus.</SectionHeading>
         <div className="services-grid">{services.map(service => <article className="service-card" key={service.id}>
-          <a href="#hinnakiri" onClick={() => setCategory(service.id)} aria-label={`${service.title} — vaata hinnakirja`}><div className="service-photo"><Photo src={service.image} alt={service.alt} /><span className="circle-arrow"><Arrow /></span></div><div className="service-title"><span>{service.number}</span><h3>{service.title}</h3></div></a><p>{service.description}</p>
+          <a href="#hinnakiri" onClick={() => setCategory(service.id)} aria-label={`${service.title} — vaata hinnakirja`}><div className="service-photo"><Photo src={service.image} alt={service.alt} />{service.image.includes('-concept') && <span className="service-image-note">VISUALISEERING</span>}<span className="circle-arrow"><Arrow /></span></div><div className="service-title"><span>{service.number}</span><h3>{service.title}</h3></div></a><p>{service.description}</p>
         </article>)}</div>
         <p className="content-note">Teenuste valik on näidis ja täpsustub enne avamist. Esteetilise meditsiini teenused eeldavad sobivuse hindamist kvalifitseeritud spetsialisti poolt.</p>
       </section>
