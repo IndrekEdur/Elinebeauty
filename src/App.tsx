@@ -38,10 +38,10 @@ export default function App() {
       </section>
 
       <section className="section team-section" id="spetsialistid">
-        <SectionHeading eyebrow="03 / MEIE INIMESED" title={<>Ilu taga on <em>inimesed.</em></>}>Saame tuttavaks. Meie juuksur Cristina Land.</SectionHeading>
+        <SectionHeading eyebrow="03 / MEIE INIMESED" title={<>Ilu taga on <em>inimesed.</em></>}>Saame tuttavaks. Erle Edur ja Cristina Land.</SectionHeading>
         {specialists.map(person => <article className="specialist-feature" key={person.name}>
           <div className="specialist-portrait"><Photo src={person.image} alt={person.alt} /></div>
-          <div className="specialist-copy"><Monogram /><p className="eyebrow">{person.role}</p><h3>{person.name}</h3><p>{person.text}</p><a className="text-link" href="#hinnakiri" onClick={() => setCategory('juuksed')}>Tutvu juuksuriteenustega <Arrow /></a><span className="specialist-signature">Loomulikult sina.</span></div>
+          <div className="specialist-copy"><Monogram /><p className="eyebrow">{person.role}</p><h3>{person.name}</h3><p>{person.text}</p><a className="text-link" href="#hinnakiri" onClick={() => setCategory(person.category)}>{person.linkLabel} <Arrow /></a><span className="specialist-signature">Loomulikult sina.</span></div>
         </article>)}
       </section>
 
