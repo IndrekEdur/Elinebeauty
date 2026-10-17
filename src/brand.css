@@ -52,3 +52,7 @@
 /* Let the page surface show through the white logo background. */
 .brand-logo{background:transparent;mix-blend-mode:multiply}
 .wordmark,.booking-banner .monogram{background:transparent}
+
+/* Alpha-enabled SVG: no blend mode or solid background required. */
+.brand-logo{aspect-ratio:790/365;background:transparent;mix-blend-mode:normal}
+.brand-logo img{position:static;display:block;width:100%;height:100%;filter:none;object-fit:contain}

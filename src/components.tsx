@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { brand, site } from './content';
 
 export function BrandLogo({ decorative = false }: { decorative?: boolean }) {
-  return <span className="brand-logo"><img src="/images/eline-logo.jpg" alt={decorative ? '' : 'eliné — Beauty · Hair · Aesthetics'} width="1180" height="522" /></span>;
+  return <span className="brand-logo"><img src="/images/eline-logo-transparent.svg" alt={decorative ? '' : 'eliné — Beauty · Hair · Aesthetics'} width="1180" height="522" /></span>;
 }
 
 export function Monogram() {
