@@ -47,7 +47,7 @@ export default function App() {
 
       <section className="prices-section" id="hinnakiri"><div className="section">
         <SectionHeading eyebrow="04 / HINNAKIRI" title={<>Sinu järgmine <em>iluhetk.</em></>}>Vali kategooria ja tutvu hoolitsustega. Kinnitatud hinnakiri lisandub peagi.</SectionHeading>
-        <div className="prices-layout"><div className="price-categories" role="group" aria-label="Hinnakirja kategooria">{services.map(service => <button key={service.id} aria-pressed={category === service.id} onClick={() => setCategory(service.id)}>{service.title}<span aria-hidden="true">↗</span></button>)}</div>
+        <div className="prices-layout"><div className="price-categories" role="group" aria-label="Hinnakirja kategooria">{services.map(service => <button key={service.id} aria-pressed={category === service.id} onClick={() => setCategory(service.id)}>{service.title}<Arrow /></button>)}</div>
         <div className="price-panel" aria-live="polite"><h3>{selected.title}</h3>{selected.items.map(item => <div className="price-row" key={item}><span>{item}</span><span>Täpsustamisel</span></div>)}<p className="content-note">Näidisteenused · hinnad ei ole veel kinnitatud.</p></div></div>
       </div></section>
 

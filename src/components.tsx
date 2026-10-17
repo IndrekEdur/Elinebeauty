@@ -2,7 +2,11 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { brand, site } from './content';
 
 export function Monogram() {
-  return <svg viewBox="0 0 100 100" className="monogram" aria-hidden="true"><circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" strokeWidth="1" /><text x="43" y="75" fontFamily="Cormorant Garamond, Georgia, serif" fontSize="74" fill="currentColor">E</text><path d="M29 78 Q20 51 37 22" fill="none" stroke="currentColor" strokeWidth="1.5" />{[[28,65,-40],[24,53,-35],[27,40,-30],[33,29,20],[34,56,35],[34,44,40]].map(([x,y,r],i)=><ellipse key={i} cx={x} cy={y} rx="3" ry="9" transform={`rotate(${r} ${x} ${y})`} fill="currentColor" />)}</svg>;
+  return <svg viewBox="0 0 100 110" className="monogram" aria-hidden="true">
+    <path fill="currentColor" d="M42 30H88L90 47H88C84 34 79 32 63 32H57V65H64C76 65 78 62 80 54H82V79H80C78 69 75 67 64 67H57V100H65C80 100 86 94 92 82H94L89 102H40V100L47 98V34L42 32Z" />
+    <path d="M22 105C43 88 27 58 42 25" fill="none" stroke="currentColor" strokeWidth="1.4" />
+    <path fill="currentColor" d="M35 81C20 78 16 68 13 59C27 64 34 71 35 81ZM33 65C20 58 20 48 20 41C30 49 34 55 33 65ZM36 46C27 37 29 26 32 19C38 29 39 37 36 46ZM41 30C37 19 41 9 47 3C47 14 46 23 41 30ZM40 34C43 21 54 18 63 15C58 25 51 31 40 34ZM35 57C40 43 53 41 62 39C54 50 45 55 35 57ZM35 78C40 66 49 64 59 63C53 72 45 77 35 78ZM32 94C27 85 18 84 12 83C17 91 23 95 32 94Z" />
+  </svg>;
 }
 
 export function Wordmark() {
@@ -10,7 +14,7 @@ export function Wordmark() {
 }
 
 export function Arrow() {
-  return <span aria-hidden="true">↗</span>;
+  return <svg className="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" /></svg>;
 }
 
 export function Photo({ src, alt, className = '', eager = false }: { src: string; alt: string; className?: string; eager?: boolean }) {
