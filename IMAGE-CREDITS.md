@@ -15,3 +15,9 @@ Fotod on alla laaditud Unsplashi pildiserverist. Need on visuaalse kavandi kohat
 | person-3.jpg | https://images.unsplash.com/photo-1544005313-94ddf0286df2 |
 
 Litsents: https://unsplash.com/license . Enne avaldamist eelista salongi enda loaga fotosid ja kinnita vajadusel isiku-/kaubamärgiõigused. Kohalikke faile võib laadimise kiirendamiseks optimeerida; säilita päritoluandmed.
+
+## Omaniku saadetud materjalid
+
+- cristina-land.jpg: omaniku antud Cristina Landi portree; nimi ja amet Juuksur on omaniku kinnitatud. Portreed ei ole muudetud.
+- salon-front-concept.jpg ja salon-plan-concept.jpg: omaniku saadetud salongi visualiseeringud, mitte kinnitatud fotod olemasolevast salongist. Algfailid säilivad; paigutust kärbitakse CSS-iga.
+- ERLIN-i brändinäidis on värvide ja tüpograafia inspiratsioon. Veebilehe kinnitatud nimi on ELINE Beauty & Aesthetics.

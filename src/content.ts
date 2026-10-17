@@ -1,4 +1,5 @@
 /** Kinnita sisu enne avaldamist. Null tähendab teadlikult lisamata pärisandmeid. */
+export const brand = { name: 'ELINE', descriptor: 'BEAUTY & AESTHETICS', fullName: 'Eline Beauty & Aesthetics' };
 export const site: {
   bookingUrl: string | null; address: string | null; phone: string | null;
   email: string | null; mapsEmbedUrl: string | null;
@@ -12,13 +13,11 @@ export const services = [
 ];
 
 export const specialists = [
-  { name: 'Spetsialisti nimi', role: 'Juuksur', text: 'Siia lisanduvad juuksuri tutvustus, kogemus ja erialased oskused.', image: '/images/person-1.jpg' },
-  { name: 'Spetsialisti nimi', role: 'Kosmeetik', text: 'Siia lisanduvad kosmeetiku tutvustus ja hoolduste erialane taust.', image: '/images/person-2.jpg' },
-  { name: 'Spetsialisti nimi', role: 'Esteetilise meditsiini spetsialist', text: 'Siia lisanduvad spetsialisti nimi, kontrollitud kvalifikatsioon ja tutvustus.', image: '/images/person-3.jpg' },
+  { name: 'Cristina Land', role: 'Juuksur', text: 'Tutvu meie juuksuri Cristina Landiga. Teenuste täpsem info ja võimalus tema juurde aega broneerida lisanduvad peagi.', image: '/images/cristina-land.jpg', alt: 'Juuksur Cristina Land' },
 ];
 
 export const gallery = [
-  { src: '/images/interior.jpg', alt: 'Rahulik hele interjöör', label: 'Ruum hingamiseks' },
-  { src: '/images/skin.jpg', alt: 'Näohoolduse hetk', label: 'Aeg iseendale' },
-  { src: '/images/ritual.jpg', alt: 'Hooldustoodete detail', label: 'Ilu peitub detailides' },
+  { src: '/images/salon-front-concept.jpg', alt: 'Salongi vastuvõtuala ja juuksurikohad — interjööri visualiseering', label: 'Soe vastuvõtt', note: 'Salongi interjööri visualiseering. Tegemist ei ole valminud ruumi fotoga.', concept: true },
+  { src: '/images/salon-plan-concept.jpg', alt: 'Salongi ruumilahendus ülaltvaates — interjööri visualiseering', label: 'Ruum sinu ilu jaoks', note: 'Salongi ruumilahenduse visualiseering. Tegemist ei ole valminud ruumi fotoga.', concept: true },
+  { src: '/images/skin.jpg', alt: 'Näohoolduse hetk — illustratiivne foto', label: 'Aeg iseendale', note: 'Illustratiivne näidisfoto, mitte Eline Beauty & Aesthetics salongi tegelik foto.', concept: false },
 ];
