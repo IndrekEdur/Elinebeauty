@@ -3,7 +3,7 @@ export const brand = { name: 'ELINE', descriptor: 'BEAUTY & AESTHETICS', fullNam
 export const site: {
   bookingUrl: string | null; address: string | null; phone: string | null;
   email: string | null; mapsEmbedUrl: string | null;
-} = { bookingUrl: null, address: null, phone: null, email: null, mapsEmbedUrl: null };
+} = { bookingUrl: null, address: 'Tatari 25, Tallinn', phone: null, email: null, mapsEmbedUrl: 'https://www.google.com/maps?q=Tatari+25,+Tallinn&output=embed' };
 
 export const services = [
   { id: 'juuksed', number: '01', title: 'Juuksuriteenused', description: 'Uus värv, värske lõikus või lihtsalt hetk, et tunda end iseendana.', image: '/images/hair.jpg', alt: 'Pikkade laineliste juuste detail — illustratiivne foto', items: ['Lõikus ja viimistlus', 'Juuste värvimine', 'Juuksehooldus'] },

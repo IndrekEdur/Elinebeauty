@@ -23,3 +23,5 @@ Litsents: https://unsplash.com/license . Enne avaldamist eelista salongi enda lo
 - ERLIN-i brändinäidis on värvide ja tüpograafia inspiratsioon. Veebilehe kinnitatud nimi on ELINE Beauty & Aesthetics.
 
 - facial-room-concept.jpg, consultation-room-concept.jpg ja manicure-room-concept.jpg: omaniku saadetud täiendavad ruumide visualiseeringud. Kasutatud teenuste kaartidel ja galeriis; ei kujuta kinnitatud töötajaid ega tehtud protseduure. Algfailid muutmata.
+
+- tatari-parking-guide.jpg: omaniku saadetud märgistatud kaardikuva, muutmata; parkimisala orienteeruv juhispilt. Omanik kinnitas tasulise parkimise vastavalt kohapealsele korrale.
