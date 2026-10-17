@@ -59,3 +59,7 @@
 
 .specialist-feature + .specialist-feature{margin-top:48px}.specialist-copy .eyebrow{line-height:1.8}.specialist-portrait:has(img[src*="erle-edur"]){background:#e8e4dc;display:flex;align-items:center;justify-content:center}.specialist-portrait img[src*="erle-edur"]{width:72%;height:auto;max-height:440px;object-fit:contain}
 @media(max-width:600px){.specialist-feature + .specialist-feature{margin-top:30px}.specialist-portrait:has(img[src*="erle-edur"]){height:350px}.specialist-portrait img[src*="erle-edur"]{width:65%;max-height:310px}}
+/* Erle's portrait fills the profile image column on every screen size. */
+.specialist-portrait img[src*="erle-edur"]{width:100%;height:100%;max-height:none;object-fit:cover;object-position:center 25%}
+@media(max-width:600px){.specialist-portrait:has(img[src*="erle-edur"]){height:460px}.specialist-portrait img[src*="erle-edur"]{width:100%;height:100%;max-height:none}}
+@media(max-width:359px){.specialist-portrait:has(img[src*="erle-edur"]){height:390px}}
