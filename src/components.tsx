@@ -59,3 +59,33 @@ export function Header({ onBooking }: { onBooking: () => void }) {
     <BookingButton className="header-booking" onClick={onBooking} />
   </header>;
 }
+
+const heroImages = [
+  { src: '/images/salon-front-concept.jpg', alt: 'Salongi vastuvõtuala visualiseering' },
+  { src: '/images/facial-room-concept.jpg', alt: 'Näohooldusruumi visualiseering' },
+  { src: '/images/consultation-room-concept.jpg', alt: 'Konsultatsiooniruumi visualiseering' },
+  { src: '/images/manicure-room-concept.jpg', alt: 'Maniküüriala visualiseering' },
+];
+
+export function HeroSlideshow({ paused }: { paused: boolean }) {
+  const [active, setActive] = useState(0);
+  const [reduced, setReduced] = useState(true);
+  const [ready, setReady] = useState<number[]>([0]);
+  useEffect(() => {
+    const query = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const update = () => setReduced(query.matches);
+    update(); query.addEventListener('change', update);
+    return () => query.removeEventListener('change', update);
+  }, []);
+  useEffect(() => {
+    if (paused || reduced || ready.length < 2) return;
+    const timer = window.setInterval(() => setActive(current => {
+      const next = ready.find(index => index > current);
+      return next ?? ready[0];
+    }), 4000);
+    return () => window.clearInterval(timer);
+  }, [paused, reduced, ready]);
+  return <div className="hero-slideshow">{heroImages.map((item, index) =>
+    <img key={item.src} src={item.src} alt={item.alt} aria-hidden={index !== active} className={`hero-slide ${index === active ? 'is-active' : ''}`} loading="eager" fetchPriority={index === 0 ? 'high' : 'low'} decoding="async" onLoad={() => setReady(current => current.includes(index) ? current : [...current, index].sort())} />
+  )}</div>;
+}
