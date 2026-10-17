@@ -6,7 +6,7 @@ Eestikeelne, mobiilisõbralik ilusalongi ja esteetilise kliiniku veebilehe esime
 
 ## Kohalik arendus
 
-Vajalik Node.js 22.12+ (soovitus: Node 22 LTS koos npm-iga) ja Git.
+Vajalik Node.js 22.12+ (soovitus: Node 22 LTS koos npm-iga), Git ning deployment’i testide jaoks Python 3.12+. Python kasutab ainult standardteeki; pip-pakette pole vaja. Vajadusel määra `PYTHON` keskkonnamuutujas Pythoni käivitusfaili asukoht. Zone ise ei vaja Node.js-i ega Pythonit.
 
 ```sh
 git clone https://github.com/IndrekEdur/Elinebeauty.git
@@ -45,50 +45,82 @@ Pildi lisamisel pane fail `public/images/` kausta ning lisa kirje `gallery` mass
 
 ## GitHub Actions: ettevalmistus
 
-Push `main` harusse käivitab paigalduse (`npm ci`), TypeScripti, testid ja `npm run build`. Pull request kontrollib sama build'i, kuid **ei avalda**. Valmis `dist/` salvestatakse 7 päevaks Actionsi artefaktina. Töövoogu saab ka käsitsi käivitada `workflow_dispatch` abil main-harult.
+Push `main` harusse käivitab `npm ci`, TypeScripti kontrolli, FTPS-i turvatestid ja `npm run build`. PR-i kontrollid kasutavad võltsühendusi ning **ei loo Zone’iga ühendust**. `dist/` säilib 7 päeva build-artefaktina. Lehe kujundus ja funktsionaalsus on TASK-002 muudatustes samad.
 
-Avaldamine on vaikimisi keelatud: repository variable `ZONE_DEPLOY_ENABLED` puudub. Build-logis ilmub vastav teade ja serveriga ei looda ühendust. Kui avaldamine on lubatud, kuid seadistus on puudulik või vale, töö ebaõnnestub enne võrguühendust selge veateatega. Tühja repositooriumi esmane README commit on alus muudatuste PR-ile.
+Avaldamine on vaikimisi lukus: repository variable `ZONE_DEPLOY_ENABLED` peab puuduma või olema `false`. `production` environment’i ja Required reviewers’i ei saa luua ainult YAML-iga.
 
-1. Ava GitHubis repositooriumi **Settings → Environments → New environment** ja loo täpselt `production`.
-2. Piira deployment branch valikuga ainult `main`.
-3. Lülita sisse **Required reviewers** ja lisa sobiv kinnitaja. Vajaduse korral keela administraatori möödapääs. `Prevent self-review` nõuab teist inimest, seega üksi töötades vali reegel teadlikult.
-4. Required reviewers'i saadavus sõltub repositooriumi nähtavusest ja GitHubi paketist. Kui seda valikut pole, jäta `ZONE_DEPLOY_ENABLED` välja lülitatuks, kuni sobiv kaitse või pakett on kokku lepitud. YAML üksi ei seadista GitHubi kinnitajaid.
-5. Soovitus: kaitse `main` haru, nõua PR-i ja edukat `build` kontrolli; piira õigust muuta töövoogu ja environment'i.
+1. Ava GitHubis **Settings → Environments → New environment**, loo `production`.
+2. Piira environment’i deployment branches ainult `main` harule.
+3. Lisa **Required reviewers** alla kinnitaja; vajadusel keela administraatori möödapääs. Üksi töötades arvesta, et `Prevent self-review` nõuab teise inimese kinnitust.
+4. Kinnitajate saadavus sõltub GitHubi paketist ja repositooriumi nähtavusest. Kui seda valikut pole, hoia avaldamislukk väljas kuni sobiv kaitse on kokku lepitud.
+5. Kaitse main-haru PR-i ja eduka `build` kontrolli nõudega. Anna töövoogude ja environment’i muutmisõigus ainult usaldatud haldajale.
 
-## Zone: SSH/SFTP ja veebijuur
+## Zone: FTPS ja teadaolevad andmed
 
-**Seda osa teeme koos pärast omaniku kinnitust. Ära veel avaldamist sisse lülita.**
+SSH/SFTP lahendus on asendatud **explicit FTPS-iga**. Vanu SSH võtmeid, known_hosts kirjeid ning `ZONE_HOST`, `ZONE_PORT`, `ZONE_USERNAME`, `ZONE_SSH_KEY`, `ZONE_TARGET_PATH`, `ZONE_KNOWN_HOSTS` ja `ZONE_CONFIRMED_TARGET_PATH` muutujaid enam ei kasutata. Neid pole selleks töövooks vaja lisada.
 
-1. Ava Minu Zone'is õige `elinebeauty.ee` virtuaalserver. Kontrolli SSH hosti, porti ja kasutajanime tegelikust serveri seadistusest, mitte domeeninime põhjal oletades.
-2. Loo eraldi deployment'i võtmepaar turvalises arvutis, nt `ssh-keygen -t ed25519 -C "elinebeauty-github-deploy" -f elinebeauty-deploy`. Automaatika skript ootab paroolifraasita võtit; kasuta eraldi piiratud õigustega võtit, ära kasuta isiklikku põhivõtit. Avalik `.pub` osa lisa Zone SSH võtmete haldusesse. Privaatset osa hoia ainult GitHub environment secret'is.
-3. Kinnita Zone'iga SSH ligipääsureeglid. Zone kasutab võtmeautentimist ja võib kasutada IP usaldusnimekirja. GitHubi tavaliste runner'ite väljuv IP muutub: vali vajadusel püsiva IP-ga runner ja kohanda `runs-on`. Ära ava kogu internetile ligipääsu pelgalt selle juhendi tõttu.
-4. Kinnita domeeni **täpne absoluutne veebijuur**. Ära eelda, et see on kasutaja kodukataloog või `/`. Skript nõuab vähemalt kolme kataloogitaset (nt `/srv/example/htdocs` on ainult süntaksinäide, mitte Zone'i tegelik tee), ilma lõpus oleva `/` märgita. Kui tegelik tee ei vasta sellele, kohanda kontrolli alles pärast kinnitamist.
-5. Varunda olemasolev veebijuur. SFTP **ei kustuta** faile, kuid samanimelised failid kirjutatakse üle. Kontrolli olemasolevaid `index.php`, `index.html`, `.htaccess` ja DirectoryIndex reegleid: vana `index.php` võib jätkuvalt avaleheks jääda. Failide kustutamine või olemasolevate serverireeglite muutmine vajab eraldi kokkulepet.
-6. Hangi serveri SSH avalik hostivõti ja võrdle sõrmejälge usaldatud Zone'i info või toega. `ssh-keyscan -p PORT HOST` võib koguda kirje, kuid **ei tõenda iseseisvalt serveri identiteeti**. Kinnita sõrmejälg sõltumatu kanali kaudu. Töövoog ei kasuta pimedat `ssh-keyscan` usaldamist ega `StrictHostKeyChecking=no` lülitit.
-7. Kontrolli, et HTTPS sertifikaat ja domeeni suunamine on Zone'is õiged. See projekt ei muuda DNS-i ega SSL-i automaatselt.
+- Domeen: `elinebeauty.ee`, ilma sidekriipsuta.
+- Zone’i FTP ülevaates näidatud host: `elinebeauty.ee`.
+- FTP süsteemne kasutajanimi: `d152747f1049025`.
+- WebFTP-s on `htdocs`, mille sees nähti 366 B suurust `index.html` faili. Faili sisu pole loetud.
+- FTP kaudu nähtav algkataloog, täpne sihttee, port ja FTPS-ühenduse sobivus **pole päris ühendusega kontrollitud**. `/htdocs/` on ainult kandidaat.
 
-## GitHub Secrets ja Variables
+Omanik võib kasutada olemasolevat FTP parooli ja sisestab selle ise otse GitHub production Secretsisse. Parooli vahetamine pole ühenduse kontrolli eeltingimus. Ära kopeeri parooli vestlusest ega kirjuta seda lähtekoodi, terminali käsureale või PR-i. Enne ühenduse kontrolli oota omaniku kinnitust, et `ZONE_FTP_PASSWORD` on lisatud. Avaldamise skript loeb seda ainult keskkonnamuutujast; protokolli debug-logimine on välja lülitatud.
 
-Lisa **Settings → Environments → production → Environment secrets** all:
+Explicit FTPS alustab FTP juhtühendust tavaliselt pordil **21**, läheb käsuga AUTH TLS üle TLS-ile **enne** kasutajanime/parooli edastamist ning nõuab PROT P-ga krüpteeritud andmeühendusi. Porti ja Zone’i ligipääsureegleid kontrollitakse hiljem lugemiskontrolliga. Implicit FTPS/990 ega krüpteerimata FTP fallback pole toetatud.
 
-| Secret | Väärtus |
+Sertifikaati kontrollitakse süsteemi usaldatud CA-de ja seadistatud hostinime vastu, vähemalt TLS 1.2 abil, nii juht- kui andmeühendusel. Andmeühendus kasutab TLS sessiooni taaskasutust. Kui `elinebeauty.ee` ei vasta FTP-serveri sertifikaadile, küsi Zone’ilt **sertifikaadile vastav ametlik FTP host** ja uuenda `ZONE_FTP_HOST`. Ära keela sertifikaadi/hostinime kontrolli ega osta selle vea lahendamiseks oletuse põhjal veebilehe TLS-sertifikaati.
+
+## Secrets: kõigepealt ainult ühenduse andmed
+
+Ava **Settings → Environments → production → Environment secrets → Add environment secret**.
+
+| Secret | Sisestatav väärtus |
 | --- | --- |
-| `ZONE_HOST` | Zone'i kinnitatud SSH hostinimi või IPv4 aadress, ilma `https://` osata |
-| `ZONE_PORT` | Tegelik SSH port, tavaliselt 22; kontrolli Zone'ist |
-| `ZONE_USERNAME` | SSH kasutajanimi |
-| `ZONE_SSH_KEY` | Täielik deployment'i privaatvõti koos BEGIN/END ridade ja reavahetustega |
-| `ZONE_TARGET_PATH` | Kinnitatud olemasolev absoluutne veebijuur |
-| `ZONE_KNOWN_HOSTS` | Kontrollitud OpenSSH known_hosts kirje; ebastandardse pordi puhul hostiväli `[HOST]:PORT` |
+| `ZONE_FTP_HOST` | Esialgu Zone’i näidatud `elinebeauty.ee`; TLS-hostinime sobivus vajab kontrolli |
+| `ZONE_FTP_PORT` | Zone’i explicit FTPS port; tavapärane 21 vajab kontrolli |
+| `ZONE_FTP_USERNAME` | `d152747f1049025` |
+| `ZONE_FTP_PASSWORD` | Omaniku valitud olemasolev või uus FTP parool; omanik sisestab ainult GitHub Secretsisse |
+| `ZONE_FTP_TARGET_PATH` | Lisa alles pärast lugemiskontrolli: kinnitatud FTP kaudu nähtav täpne sihttee |
 
-Viies nõutud secret'is puudub hosti identiteedi kontroll; turvalisuse jaoks on lisatud kuues `ZONE_KNOWN_HOSTS`. Võtmeid, paroole ega secret'ite väärtusi ei pea vestlusse saatma.
+Ära lisa parooli `VITE_*` muutujasse. Ühenduse andmed pole lehe build’i keskkonnas ega artefaktides. Töövoog ei logi serveri toorveateateid, sest need võivad korrata ligipääsuandmeid.
 
-Lisa `production` **Environment variables** alla `ZONE_CONFIRMED_TARGET_PATH`, mis on täpselt sama kinnitatud tee kui `ZONE_TARGET_PATH`. See eraldi kinnitus väldib kogemata sihtkoha muutmist.
+## Ainult lugemiseks mõeldud FTPS-kontroll
 
-**Alles omaniku selgesõnalise kinnituse järel** lisa **Settings → Secrets and variables → Actions → Variables → Repository variable** `ZONE_DEPLOY_ENABLED` väärtusega `true`. See peab olema repository tasemel, sest töö käivitumise tingimus hinnatakse enne environment'i avamist. Enne seda peavad `production`, kinnitajad, kõik secrets ja tee kontroll olema valmis.
+Fail: `.github/workflows/ftps-check.yml`. See ei käivitu push’i ega PR-i peale ning ei lülita avaldamist sisse.
 
-Järgmine main-push või käsitsi Run workflow ehitab lehe, ootab seadistatud kinnitust ja laeb failid SFTP kaudu üles. Avaldamised on järjestatud, käimasolevat ülekannet järgmine push ei katkesta. Ressursid lähevad üles enne `index.html` faili. Ülekanne ei ole atomaarne: võrguvea korral võib vaja minna sama kontrollitud build'i uuesti avaldamist. Vanu räsitud ressursse ei kustutata. Kettakasutuse puhastamine lepitakse hiljem eraldi kokku.
+1. Vaata muudatused üle ja ühenda PR `main` harusse, hoides **repository variable `ZONE_DEPLOY_ENABLED=false`** või lisamata. Eraldi käsitsi käivitatav workflow muutub Actionsis kättesaadavaks pärast main-harule jõudmist.
+2. Lisa neli ühenduse secret’it. Parooli sisestab omanik ise ja kinnitab selle lisamise; olemasoleva parooli kasutamine on lubatud. Ära veel määra oletuslikku sihtteed.
+3. **Omaniku loal** ava **Actions → Zone FTPS lugemiskontroll → Run workflow**, vali `main`, märgi kinnitus „FTP parool on Secretsis ja luban ainult FTP kataloogide lugemist“.
+4. Kinnita `production` töö, kui environment’i kaitse seda küsib.
+5. Tulemus näitab FTP algkataloogi `PWD` ja `MLSD` kirjeid. Kui algkataloogis on `htdocs`, liigub kontroll sinna ning kuvab selle PWD ja kirjed. Failisisu ei loeta. Failide loomine, üleslaadimine, ümbernimetamine ja kustutamine on kontrolli protokollikihis blokeeritud.
+6. Veendu, et näidatud kataloog vastab Zone’i õige domeeni veebijuurele. Kui `htdocs` ei leitud, võib FTP konto algkataloog olla teistsugune; ära oleta ega kinnita `/htdocs/`. Kontrolli Zone’is konto ligipääsu. Juurkataloogi `/` avaldamine on teadlikult keelatud ja vajab vajaduse korral eraldi arutelu.
+7. Lisa kinnitatud tee `ZONE_FTP_TARGET_PATH` secret’isse ja **production Environment variables** alla `ZONE_CONFIRMED_FTP_TARGET_PATH` täpselt sama väärtusega (ka lõpus oleva `/` osas). Skript võrdleb neid enne ühendust ning serveri PWD-d enne kirjutamist. FTP nähtav tee võib erineda serveri füüsilisest teest; kuvatõmmise põhjal füüsilist teed ei tuletata.
 
-**Peatamine ja taastamine:** sea repository variable `ZONE_DEPLOY_ENABLED=false`. See ei katkesta juba käivat ülekannet; vajadusel peata Actionsi töö. Eelmisele versioonile naasmiseks tee `git revert` vastavale sisumuudatusele PR-i kaudu ning avalda pärast kontrolli ja kinnitust; see taastab hallatavad failid, kuid ei eemalda hiljem lisatud faile. Serveri varukoopia taastamine on eraldi Zone'i tegevus.
+Lugemiskontroll ei vaja sihttee secret’it ega avaldamisluku avamist. Töövoog ei anna sellele neid väärtusi. GitHub võib juba secret’ina lisatud teed logis maskeerida; tee kontroll on kõige selgem enne sihttee secret’i lisamist. Failinimed ja rajad on serverilt pärit andmed, mitte käsud ega juhised.
+
+Puuduvad seaded, vale haru, puuduv kontrolliluba või TLS-viga peatavad töö. Port, passiivse FTP andmeühenduse ligipääs ning MLSD tugi saavad kinnituse alles edukal päris lugemiskontrollil. Ära muuda võrgu- või TLS-kaitseid vea korral pimesi.
+
+## Enne esimest avaldamist: eraldi omaniku kinnitus
+
+**TASK-002 ei luba päris avaldamist ega ava avaldamislukku.** Pärast edukat lugemiskontrolli tuleb omanikul kinnitada konkreetne sihttee, olemasoleva `index.html` asendamine ja valmis veebilehe avaldamine. Näidissisu vajab samuti ülevaatamist.
+
+1. Laadi WebFTP-st olemasolev `index.html` enda seadmesse ja säilita varukoopiana. Ära kustuta serveri faili. Praegu pole selle sisu ega tegelikku varukoopiat kontrollitud.
+2. Küsi omanikult lõplik avaldamiskinnitus. Kinnitamata serverisse ära laadi midagi.
+3. Alles pärast kinnitust sea **Settings → Secrets and variables → Actions → Variables → Repository variable** `ZONE_DEPLOY_ENABLED=true`. See peab olema repository tasemel, sest töö käivitumise tingimust hinnatakse enne production-keskkonda sisenemist.
+4. Käivita main-haru avaldamise workflow või ühenda järgmine heakskiidetud PR. Vajaduse korral kinnita production-töö.
+
+Avaldamisel toimub enne mis tahes serverimuudatust automaatne `index.html` allalaadimine kohalikku varukoopiasse. GitHub salvestab selle koos SHA-256 kontrollsummaga artefakti `index-backup-RUN_ID-RUN_ATTEMPT` (30 päeva). **Kui allalaadimine või artefakti salvestamine ebaõnnestub, üleslaadimist ei alustata.** Enne kirjutamist kontrollitakse veel, et serveri index.html pole pärast varundust muutunud. Puuduv või üle 10 MB index.html peatab automaatika ja nõuab eraldi ülevaatamist. Varukoopia ei sisalda ühenduse konfiguratsiooni ega FTP parooli; see sisaldab ainult senist HTML-faili ja kontrollsummat. Laadi esimene artefakt enne aegumist enda seadmesse.
+
+Alles seejärel lisatakse build’i ressursikataloogid ja failid ning **viimasena index.html**. Sihtjuurkataloogi ei looda automaatselt. Vanu serverifaile ei kustutata, ent samanimelised failid kirjutatakse üle. Ülekanne pole atomaarne: võrguvea korral võib vaja minna ülevaatust ja uuesti avaldamist. Ainult index.html varukoopia pole kogu veebijuure varukoopia; mahukama olemasoleva saidi puhul varunda see eraldi. Hoia tulevased versioonid Gitis, vanad räsitud ressursid säilivad serveris.
+
+**Peatamine:** sea `ZONE_DEPLOY_ENABLED=false`; juba käiva töö peatamiseks kasuta Actionsi Cancel nuppu. **Taastamine:** vajaduse korral laadi salvestatud index.html tagasi õigesse kausta omaniku kinnitatud tegevusena või tee eelmise sisumuudatuse `git revert` PR-i kaudu. Varukoopia taastamine ja serverifailide kustutamine ei käivitu automaatselt.
+
+## Tehnilised kontrollid
+
+`npm test` käivitab Python unittest testid. Need kasutavad ainult mock-/võlts-FTP kliente: kontrollitakse lukku, sihttee kinnitust, puuduvat konfiguratsiooni, TLS-i ja hostinime valideerimist, andmeühenduse krüpteerimist, protokolli kirjutamiskeeldu, varukoopiat ja üleslaadimisjärjekorda. Pärisserveri ühenduse sobivust need testid ei tõenda.
+
+`scripts/ftps.py` toetab käske `probe`, `backup` ja `deploy`. Käivita ühendusega käske ainult ettenähtud Actionsi töövoo kaudu pärast omaniku luba. Skriptide argumendid ei võta vastu paroole. Runner vajab Python 3.12+ standardteeki, Zone server ei vaja Pythonit.
 
 ## Telefonist Codexi abil uuendamine
 
@@ -96,7 +128,7 @@ Järgmine main-push või käsitsi Run workflow ehitab lehe, ootab seadistatud ki
 2. Vali repositoorium `IndrekEdur/Elinebeauty` ja alusta konkreetset ülesannet, näiteks: „Muuda src/content.ts teenuste tutvustusi järgmise teksti järgi. Säilita kujundus, käivita npm ci, npm run check, npm test ja npm run build ning ava PR. Ära muuda deployment'i lukku.“
 3. Vaata telefonis üle PR-i muudatused, pildid ja Actionsi kontrollid. Ära lase tegelikke hindu, kvalifikatsioone ega kontaktandmeid välja mõelda.
 4. Ühenda heakskiidetud PR `main` harusse. Kui avaldamine on sisse lülitatud, kinnita `production` töö GitHubis; vajadusel ava GitHub mobiilibrauseris, kui rakendus vajalikku vaadet ei paku.
-5. Kontrolli pärast avaldamist telefonis `https://elinebeauty.ee` avalehte, menüüd, hinnakirja ja broneerimisnuppu. Zone SSH paroole ega võtmeid pole arendusvestluses vaja.
+5. Kontrolli pärast avaldamist telefonis `https://elinebeauty.ee` avalehte, menüüd, hinnakirja ja broneerimisnuppu. FTP parooli pole arendusvestluses vaja; see jääb GitHub production Secretsisse.
 
 Codexi pilvevõimaluste olemasolu sõltub kontost ja ligipääsust. Pilveühendust, GitHubi environment'i ja Zone'i seadeid see lähtekoodi muudatus automaatselt ei loo.
 
@@ -106,11 +138,11 @@ Codexi pilvevõimaluste olemasolu sõltub kontost ja ligipääsust. Pilveühendu
 - Asenda näidissisu ja eemalda kavandi teated alles siis, kui need enam ei kehti.
 - Ühenda tegelik broneerimisteenus või jäta selge mittetoimiva ühenduse teade alles.
 - Kontrolli mobiili-, tahvli- ja arvutivaadet, klaviatuuri ning reduced-motion eelistust.
-- Kinnita Zone veebijuur, varukoopia, hostivõti, õigused ja GitHubi production kinnitaja.
+- Kinnita FTP kaudu nähtav Zone veebijuur, TLS-ühendus, varukoopia, õigused ja GitHubi production kinnitaja.
 
 ## Ametlikud juhendid
 
-- [Zone: SSH ühenduse loomine](https://www.zone.ee/help/kb/ssh-uhenduse-loomine/)
-- [Zone: SSH ligipääsupoliitika](https://www.zone.ee/help/kb/zone-ssh-ligipaasupoliitika/)
+- [Zone: FTP ühenduse andmed](https://www.zone.ee/help/en/kb/login-to-ftp/)
+- [Python: FTP_TLS](https://docs.python.org/3/library/ftplib.html#ftplib.FTP_TLS)
 - [GitHub: deployments ja environments](https://docs.github.com/en/actions/reference/workflows-and-actions/deployments-and-environments)
 - [OpenAI: Codex Cloud](https://developers.openai.com/codex/cloud/)

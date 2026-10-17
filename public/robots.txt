@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://elinebeauty.ee/sitemap.xml
