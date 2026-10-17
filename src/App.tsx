@@ -4,6 +4,7 @@ import { brand, gallery, services, site, specialists } from './content';
 
 export default function App() {
   const [booking, setBooking] = useState(false);
+  const [motionPaused, setMotionPaused] = useState(false);
   const [photo, setPhoto] = useState<number | null>(null);
   const [category, setCategory] = useState(services[0].id);
   const selected = services.find(service => service.id === category)!;
@@ -20,7 +21,7 @@ export default function App() {
           <div className="hero-actions"><BookingButton onClick={() => setBooking(true)} /><a className="text-link" href="#teenused">Tutvu teenustega <Arrow /></a></div>
           <div className="hero-bottom"><Monogram /><p>SINU ILU. SINU RÜTM.<br /><span>Meie juures on aega sinu jaoks.</span></p></div>
         </div>
-        <div className="hero-visual"><Photo src="/images/salon-front-concept.jpg" alt="Sooja valguse ja kuldsete detailidega salongi interjööri visualiseering" className="concept-photo" eager /><div className="hero-image-caption"><span>RUUM SINU ILULE</span><small>Salongi interjööri visualiseering</small></div><span className="hero-index">{brand.descriptor}</span></div>
+        <div className={`hero-visual ${motionPaused ? 'motion-paused' : ''}`}><Photo src="/images/salon-front-concept.jpg" alt="Sooja valguse ja kuldsete detailidega salongi interjööri visualiseering" className="concept-photo" eager /><div className="hero-image-caption"><span>RUUM SINU ILULE</span><small>Salongi interjööri visualiseering</small></div><span className="hero-index">{brand.descriptor}</span><button className="hero-motion-toggle" onClick={() => setMotionPaused(paused => !paused)} aria-pressed={motionPaused} aria-label="Peata pildi liikumine">{motionPaused ? 'Jätka liikumist' : 'Peata liikumine'}</button></div>
       </section>
       <div className="values-strip" aria-label="Meie väärtused"><span>Personaalne lähenemine</span><i aria-hidden="true">✧</i><span>Loomulik ilu</span><i aria-hidden="true">✧</i><span>Teadlik hoolitsus</span><i aria-hidden="true">✧</i><span>Aeg iseendale</span></div>
 
