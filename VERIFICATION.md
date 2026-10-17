@@ -1,4 +1,17 @@
-# TASK-001 kontroll
+# TASK-002 kontroll
+
+Kontrollitud 17.10.2026. SFTP on asendatud explicit FTPS-iga; veebilehe lähtefaile ja kujundust ei muudetud.
+
+- Puhas `npm ci`: läbitud; audit raporteeris 0 haavatavust. Esimene katse kohtas ajutist Windowsi faililukku; kordus õnnestus.
+- `npm run check` ja `npm run build`: läbitud.
+- `npm test`: 23 võrguühenduseta testi. Kaetud puuduv konfiguratsioon, avaldamislukk, eraldi lugemisluba, FTP sihttee kinnitus, TLS-sertifikaadi/hostinime kontroll, PROT P, TLS sessiooni taaskasutus, kirjutamiskäskude blokeerimine kontrollis, varukoopia ning index.html viimasena üleslaadimine.
+- Vale siht-PWD, ümber suunatud ressursikataloog, puuduv varukoopia või pärast varundust muutunud serveri index.html peatavad üleslaadimise.
+- Testid kontrollivad, et vigase sertifikaadi korral parooli ei saadeta ning protokolli toorveateated ei leki logidesse.
+- `git diff -- src public index.html package-lock.json`: tühi; rakenduse kujunduse ja sõltuvuste muudatusi pole.
+
+Päris FTPS ühendust ei tehtud, porti ega `/htdocs/` teed ei kinnitatud ning varukoopiat serverist ei laaditud. Varem vestluses jagatud parooli ei kasutatud. GitHubi Secrets/Variables, production-kaitseid ja avaldamislukku ei muudetud. Omaniku järgmised sammud on README-s.
+
+# TASK-001 varasem kontroll
 
 Kontrollitud 17.10.2026 kohalikus Windowsi keskkonnas.
 

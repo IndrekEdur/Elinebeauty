@@ -1,0 +1,48 @@
+name: Zone FTPS lugemiskontroll
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm_read_only:
+        description: 'Uus parool on Secretsis ja luban ainult FTP kataloogide lugemist'
+        required: true
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  authorize:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 2
+    steps:
+      - name: Kontrolli haru ja omaniku luba
+        env:
+          APPROVED: ${{ inputs.confirm_read_only }}
+          BRANCH: ${{ github.ref }}
+        run: |
+          if [ "$BRANCH" != 'refs/heads/main' ] || [ "$APPROVED" != 'true' ]; then
+            echo '::error::Vali main ning kinnita uus parool ja lugemiskontrolli luba. Serveriga ühendust ei loodud.'
+            exit 1
+          fi
+  inspect:
+    needs: authorize
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    environment: production
+    concurrency:
+      group: zone-production
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Loe algkataloogi ja htdocs infot (kirjutamine blokeeritud)
+        env:
+          ZONE_FTP_PROBE_APPROVED: ${{ inputs.confirm_read_only }}
+          ZONE_FTP_HOST: ${{ secrets.ZONE_FTP_HOST }}
+          ZONE_FTP_PORT: ${{ secrets.ZONE_FTP_PORT }}
+          ZONE_FTP_USERNAME: ${{ secrets.ZONE_FTP_USERNAME }}
+          ZONE_FTP_PASSWORD: ${{ secrets.ZONE_FTP_PASSWORD }}
+        run: python3 scripts/ftps.py probe

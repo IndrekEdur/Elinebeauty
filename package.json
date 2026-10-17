@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "check": "tsc --noEmit",
-    "test": "node --test tests/*.test.mjs",
+    "test": "node scripts/test-ftps.mjs",
     "build": "tsc --noEmit && vite build && tsx scripts/prerender.tsx",
     "preview": "vite preview --host 127.0.0.1"
   },
