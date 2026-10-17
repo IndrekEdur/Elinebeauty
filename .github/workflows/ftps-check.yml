@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       confirm_read_only:
-        description: 'Uus parool on Secretsis ja luban ainult FTP kataloogide lugemist'
+        description: 'FTP parool on Secretsis ja luban ainult FTP kataloogide lugemist'
         required: true
         type: boolean
         default: false
@@ -23,7 +23,7 @@ jobs:
           BRANCH: ${{ github.ref }}
         run: |
           if [ "$BRANCH" != 'refs/heads/main' ] || [ "$APPROVED" != 'true' ]; then
-            echo '::error::Vali main ning kinnita uus parool ja lugemiskontrolli luba. Serveriga ühendust ei loodud.'
+            echo '::error::Vali main ning kinnita FTP parooli lisamine ja lugemiskontrolli luba. Serveriga ühendust ei loodud.'
             exit 1
           fi
   inspect:

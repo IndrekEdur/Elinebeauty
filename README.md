@@ -65,7 +65,7 @@ SSH/SFTP lahendus on asendatud **explicit FTPS-iga**. Vanu SSH võtmeid, known_h
 - WebFTP-s on `htdocs`, mille sees nähti 366 B suurust `index.html` faili. Faili sisu pole loetud.
 - FTP kaudu nähtav algkataloog, täpne sihttee, port ja FTPS-ühenduse sobivus **pole päris ühendusega kontrollitud**. `/htdocs/` on ainult kandidaat.
 
-Kasuta uut eraldi FTP parooli: varem vestluses jagatud parool tuleb Zone’is vahetada. Ära kirjuta uut parooli vestlusse, lähtekoodi, terminali käsureale ega PR-i. Avaldamise skript loeb seda ainult keskkonnamuutujast; protokolli debug-logimine on välja lülitatud.
+Omanik võib kasutada olemasolevat FTP parooli ja sisestab selle ise otse GitHub production Secretsisse. Parooli vahetamine pole ühenduse kontrolli eeltingimus. Ära kopeeri parooli vestlusest ega kirjuta seda lähtekoodi, terminali käsureale või PR-i. Enne ühenduse kontrolli oota omaniku kinnitust, et `ZONE_FTP_PASSWORD` on lisatud. Avaldamise skript loeb seda ainult keskkonnamuutujast; protokolli debug-logimine on välja lülitatud.
 
 Explicit FTPS alustab FTP juhtühendust tavaliselt pordil **21**, läheb käsuga AUTH TLS üle TLS-ile **enne** kasutajanime/parooli edastamist ning nõuab PROT P-ga krüpteeritud andmeühendusi. Porti ja Zone’i ligipääsureegleid kontrollitakse hiljem lugemiskontrolliga. Implicit FTPS/990 ega krüpteerimata FTP fallback pole toetatud.
 
@@ -80,7 +80,7 @@ Ava **Settings → Environments → production → Environment secrets → Add e
 | `ZONE_FTP_HOST` | Esialgu Zone’i näidatud `elinebeauty.ee`; TLS-hostinime sobivus vajab kontrolli |
 | `ZONE_FTP_PORT` | Zone’i explicit FTPS port; tavapärane 21 vajab kontrolli |
 | `ZONE_FTP_USERNAME` | `d152747f1049025` |
-| `ZONE_FTP_PASSWORD` | **Uus** Zone’is määratud parool; ainult GitHub Secretsisse |
+| `ZONE_FTP_PASSWORD` | Omaniku valitud olemasolev või uus FTP parool; omanik sisestab ainult GitHub Secretsisse |
 | `ZONE_FTP_TARGET_PATH` | Lisa alles pärast lugemiskontrolli: kinnitatud FTP kaudu nähtav täpne sihttee |
 
 Ära lisa parooli `VITE_*` muutujasse. Ühenduse andmed pole lehe build’i keskkonnas ega artefaktides. Töövoog ei logi serveri toorveateateid, sest need võivad korrata ligipääsuandmeid.
@@ -90,8 +90,8 @@ Ava **Settings → Environments → production → Environment secrets → Add e
 Fail: `.github/workflows/ftps-check.yml`. See ei käivitu push’i ega PR-i peale ning ei lülita avaldamist sisse.
 
 1. Vaata muudatused üle ja ühenda PR `main` harusse, hoides **repository variable `ZONE_DEPLOY_ENABLED=false`** või lisamata. Eraldi käsitsi käivitatav workflow muutub Actionsis kättesaadavaks pärast main-harule jõudmist.
-2. Lisa neli ühenduse secret’it, kasutades uut parooli. Ära veel määra oletuslikku sihtteed.
-3. **Omaniku loal** ava **Actions → Zone FTPS lugemiskontroll → Run workflow**, vali `main`, märgi kinnitus „Uus parool on Secretsis ja luban ainult FTP kataloogide lugemist“.
+2. Lisa neli ühenduse secret’it. Parooli sisestab omanik ise ja kinnitab selle lisamise; olemasoleva parooli kasutamine on lubatud. Ära veel määra oletuslikku sihtteed.
+3. **Omaniku loal** ava **Actions → Zone FTPS lugemiskontroll → Run workflow**, vali `main`, märgi kinnitus „FTP parool on Secretsis ja luban ainult FTP kataloogide lugemist“.
 4. Kinnita `production` töö, kui environment’i kaitse seda küsib.
 5. Tulemus näitab FTP algkataloogi `PWD` ja `MLSD` kirjeid. Kui algkataloogis on `htdocs`, liigub kontroll sinna ning kuvab selle PWD ja kirjed. Failisisu ei loeta. Failide loomine, üleslaadimine, ümbernimetamine ja kustutamine on kontrolli protokollikihis blokeeritud.
 6. Veendu, et näidatud kataloog vastab Zone’i õige domeeni veebijuurele. Kui `htdocs` ei leitud, võib FTP konto algkataloog olla teistsugune; ära oleta ega kinnita `/htdocs/`. Kontrolli Zone’is konto ligipääsu. Juurkataloogi `/` avaldamine on teadlikult keelatud ja vajab vajaduse korral eraldi arutelu.
