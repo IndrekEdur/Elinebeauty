@@ -1,5 +1,5 @@
 /** Kinnita sisu enne avaldamist. Null tähendab teadlikult lisamata pärisandmeid. */
-export const brand = { name: 'ELINE', descriptor: 'BEAUTY & AESTHETICS', fullName: 'Eline Beauty & Aesthetics' };
+export const brand = { name: 'eliné', descriptor: 'BEAUTY · HAIR · AESTHETICS', fullName: 'eliné Beauty · Hair · Aesthetics' };
 export const site: {
   bookingUrl: string | null; address: string | null; phone: string | null;
   email: string | null; mapsEmbedUrl: string | null;

@@ -25,3 +25,5 @@ Litsents: https://unsplash.com/license . Enne avaldamist eelista salongi enda lo
 - facial-room-concept.jpg, consultation-room-concept.jpg ja manicure-room-concept.jpg: omaniku saadetud täiendavad ruumide visualiseeringud. Kasutatud teenuste kaartidel ja galeriis; ei kujuta kinnitatud töötajaid ega tehtud protseduure. Algfailid muutmata.
 
 - tatari-parking-guide.jpg: omaniku saadetud märgistatud kaardikuva, muutmata; parkimisala orienteeruv juhispilt. Omanik kinnitas tasulise parkimise vastavalt kohapealsele korrale.
+
+- eline-logo.jpg: omaniku kinnitatud eliné logo (Beauty · Hair · Aesthetics). Algfail muutmata; CSS piirab välisservade nähtavust. Asendab varasema E-monogrammi.
