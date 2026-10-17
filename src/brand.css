@@ -45,3 +45,7 @@
 @media(max-width:600px){.wordmark{width:125px}.wordmark .brand-logo{margin:0}.hero-bottom .monogram{width:95px}.specialist-copy .monogram{display:none}.header{gap:6px}.header-booking{padding:10px 12px}}
 @media(max-width:359px){.wordmark{width:105px}.header-booking{padding:10px 8px}}
 .brand-logo{aspect-ratio:2}.brand-logo img{top:-13%;width:145%;left:-22.5%}
+/* White logo treatment preserves the original lettering without redrawing it. */
+.brand-logo{background:#fff;mix-blend-mode:normal}
+.brand-logo img{filter:grayscale(1) contrast(1.35) brightness(1.1)}
+.wordmark,.booking-banner .monogram{background:#fff}
