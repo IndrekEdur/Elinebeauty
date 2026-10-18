@@ -29,3 +29,5 @@ Litsents: https://unsplash.com/license . Enne avaldamist eelista salongi enda lo
 - eline-logo.jpg: omaniku kinnitatud eliné logo (Beauty · Hair · Aesthetics). Algfail muutmata; CSS piirab välisservade nähtavust. Asendab varasema E-monogrammi.
 
 - erle-edur.jpg: omaniku saadetud Erle Eduri portree. Nimi ja rollid (esteetilise meditsiini õde, juuksur, iluteenindaja) pärinevad omanikult. Väikese resolutsiooniga originaal on muutmata.
+
+- erle-edur-portrait-hq.jpg: omaniku saadetud suurema eraldusvõimega Erle portree, asendab veebilehel varasema väikese foto. Algfail on muutmata.

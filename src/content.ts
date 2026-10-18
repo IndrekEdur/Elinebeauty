@@ -13,7 +13,7 @@ export const services = [
 ];
 
 export const specialists = [
-  { name: 'Erle Edur', role: 'Esteetilise meditsiini õde · Juuksur · Iluteenindaja', text: 'Erle ühendab oma töös esteetilise meditsiini õe, juuksuri ja iluteenindaja rollid. Teenuste täpsem info ja broneerimisvõimalus lisanduvad peagi.', image: '/images/erle-edur.jpg', alt: 'Erle Edur — esteetilise meditsiini õde, juuksur ja iluteenindaja', category: 'esteetika', linkLabel: 'Tutvu teenustega' },
+  { name: 'Erle Edur', role: 'Esteetilise meditsiini õde · Juuksur · Iluteenindaja', text: 'Erle ühendab oma töös esteetilise meditsiini õe, juuksuri ja iluteenindaja rollid. Teenuste täpsem info ja broneerimisvõimalus lisanduvad peagi.', image: '/images/erle-edur-portrait-hq.jpg', alt: 'Erle Edur — esteetilise meditsiini õde, juuksur ja iluteenindaja', category: 'esteetika', linkLabel: 'Tutvu teenustega' },
   { name: 'Cristina Land', role: 'Juuksur', text: 'Tutvu meie juuksuri Cristina Landiga. Teenuste täpsem info ja võimalus tema juurde aega broneerida lisanduvad peagi.', image: '/images/cristina-land.jpg', alt: 'Juuksur Cristina Land', category: 'juuksed', linkLabel: 'Tutvu juuksuriteenustega' },
 ];
 
