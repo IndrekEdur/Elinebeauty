@@ -1,9 +1,19 @@
 /** Kinnita sisu enne avaldamist. Null tähendab teadlikult lisamata pärisandmeid. */
 export const brand = { name: 'eliné', descriptor: 'BEAUTY · HAIR · AESTHETICS', fullName: 'eliné Beauty · Hair · Aesthetics' };
+/** Owner-confirmed legal and contact details; reuse for future policy pages. */
+export const business = {
+  brandName: 'ELINÉ',
+  legalName: 'Tatari 25 ilusalong OÜ',
+  phone: '+372 5323 7173',
+  phoneHref: 'tel:+37253237173',
+  email: 'info@elinebeauty.ee',
+  bank: 'LHV Pank',
+  iban: 'EE637700771013598236',
+};
 export const site: {
   bookingUrl: string | null; address: string | null; phone: string | null;
   email: string | null; mapsEmbedUrl: string | null;
-} = { bookingUrl: null, address: 'Tatari 25, Tallinn', phone: null, email: null, mapsEmbedUrl: 'https://www.google.com/maps?q=Tatari+25,+Tallinn&output=embed' };
+} = { bookingUrl: null, address: 'Tatari 25, Tallinn', phone: business.phone, email: business.email, mapsEmbedUrl: 'https://www.google.com/maps?q=Tatari+25,+Tallinn&output=embed' };
 
 export const services = [
   { id: 'juuksed', number: '01', title: 'Juuksuriteenused', description: 'Uus värv, värske lõikus või lihtsalt hetk, et tunda end iseendana.', image: '/images/hair.jpg', alt: 'Pikkade laineliste juuste detail — illustratiivne foto', items: ['Lõikus ja viimistlus', 'Juuste värvimine', 'Juuksehooldus'] },
