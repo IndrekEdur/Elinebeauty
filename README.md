@@ -2,7 +2,7 @@
 
 Eestikeelne, mobiilisõbralik ilusalongi ja esteetilise kliiniku veebilehe esimene versioon. React + Vite + TypeScript + Tailwind CSS. Zone vajab ainult `dist/` staatilisi faile, mitte Node.js serverit. Build eelrenderdab lehe sisu HTML-i; React lisab interaktsioonid. Fondid ja pildid serveeritakse kohalikult.
 
-**Staatus: ülevaatamiseks valmis kavand, päris domeenile avaldamine lukus.** Teenused ja tutvustused on näidissisu; spetsialistid, fotod ja kontaktandmed ei esinda kinnitatud tegelikke andmeid. Hinnad pole välja mõeldud. Broneerimisel kuvatakse teade, vorm on keelatud ja andmeid ei kogu. Analüütikat, jälitusküpsiseid ega välist kaarti pole vaikimisi lisatud.
+**Staatus:** muudatused valmistatakse ette ülevaatamiseks, automaatne avaldamine on lukus. Erle Eduri ja Cristina Landi nimed, rollid ning portreed ja Tatari 25 aadress pärinevad omanikult. Ruumipildid on märgistatud visualiseeringutena; hinnad on täpsustamisel. Broneerimisel kuvatakse teade, kontaktvorm on keelatud. Kontaktialas on väline Google Mapsi kaart ja omaniku parkimisjuhis.
 
 ## Kohalik arendus
 
@@ -41,7 +41,7 @@ npm run preview
 
 Pildi lisamisel pane fail `public/images/` kausta ning lisa kirje `gallery` massiivi koos sisulise eestikeelse alt-tekstiga. Soovituslik laius 1200–1600 px, optimeeritud WebP/JPEG. Spetsialistide fotod asenda nende loal kasutatavate tegelike fotodega. Näidissildid eemalda alles kinnitatud sisu korral.
 
-`site.bookingUrl` on praegu `null`. Lisa hiljem kontrollitud HTTPS broneerimislink: sama link jõuab kõikidesse broneerimisnuppudesse. Uuenda ka broneerimisala olekuteksti. `site.mapsEmbedUrl` aktsepteerib Google Mapsi `https://www.google.com/maps/embed?...` URL-i. Enne välise kaardi või teenuse lisamist vaata üle privaatsusteave. Kontaktvormi avamiseks tuleb eraldi lisada backend, serveripoolne valideerimine, rämpspostikaitse, privaatsustingimused ning tegelikud saatmise/vea/õnnestumise olekud; praegune vorm ei saada midagi.
+`site.bookingUrl` on praegu `null`. Lisa hiljem kontrollitud HTTPS broneerimislink: sama link jõuab kõikidesse broneerimisnuppudesse. Uuenda ka broneerimisala olekuteksti. `site.mapsEmbedUrl` aktsepteerib Google Mapsi `https://www.google.com/maps?...` URL-i. Enne välise kaardi või teenuse lisamist vaata üle privaatsusteave. Kontaktvormi avamiseks tuleb eraldi lisada backend, serveripoolne valideerimine, rämpspostikaitse, privaatsustingimused ning tegelikud saatmise/vea/õnnestumise olekud; praegune vorm ei saada midagi.
 
 ## GitHub Actions: ettevalmistus
 
@@ -150,3 +150,11 @@ Codexi pilvevõimaluste olemasolu sõltub kontost ja ligipääsust. Pilveühendu
 ### Bränd ja inimesed
 
 Brändi nimi ja spetsialistide andmed asuvad failis src/content.ts. Omaniku kinnitatud nimi on ELINE Beauty & Aesthetics; Cristina Land on juuksur. Tema portree on omaniku saadetud. Salongi ruumipildid on märgistatud visualiseeringutena. Uue kujunduse stiilid on src/brand.css failis. Pildiviited ja päritolu: IMAGE-CREDITS.md.
+
+## Premium UI/UX viimistlus
+
+Sihitud viimistluse stiilid asuvad `src/refinements.css` failis, mis laaditakse pärast olemasolevaid baasi- ja brändistiile. See fail koondab sektsioonide rütmi, ühtsed portreeformaadid, mobiili teenusekaardid, kategooriavaliku ja päise mõõtmed. Pilte, teenuseandmeid ega avaldamise seadistusi pole selles etapis muudetud.
+
+Päis muutub kerimisel kompaktseks; selle ümbris reserveerib ruumi, et sisu ei hüppaks. `useScrollReveal` lisab ilmumisefekti ainult ekraanist allpool asuvale sisule. Staatiline HTML ja vähendatud liikumisega vaade jäävad nähtavaks ka animatsioonita. Slaidiesituse ja broneerimise olemasolev käitumine säilib.
+
+Ülevaatuse tulemused ja järgmised sammud: `docs/premium-refinement.md`.

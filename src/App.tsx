@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { Arrow, BookingButton, Header, HeroSlideshow, Modal, Monogram, Photo, SectionHeading, Wordmark } from './components';
+import { Arrow, BookingButton, Header, HeroSlideshow, Modal, Monogram, Photo, SectionHeading, Wordmark, useScrollReveal } from './components';
 import { brand, gallery, services, site, specialists } from './content';
 
 export default function App() {
+  useScrollReveal();
   const [booking, setBooking] = useState(false);
   const [motionPaused, setMotionPaused] = useState(false);
   const [photo, setPhoto] = useState<number | null>(null);
@@ -19,7 +20,7 @@ export default function App() {
           <h1 id="hero-title">Ilu algab<br /><em>enesetundest</em></h1>
           <p className="hero-description">Hetk, mis kuulub sulle. Hoolitsused, mis toovad esile sinu loomuliku ilu ja hea enesetunde.</p>
           <div className="hero-actions"><BookingButton onClick={() => setBooking(true)} /><a className="text-link" href="#teenused">Tutvu teenustega <Arrow /></a></div>
-          <div className="hero-bottom"><Monogram /><p>SINU ILU. SINU RÜTM.<br /><span>Meie juures on aega sinu jaoks.</span></p></div>
+          <div className="hero-bottom"><p>SINU ILU. SINU RÜTM.<br /><span>Meie juures on aega sinu jaoks.</span></p></div>
         </div>
         <div className={`hero-visual ${motionPaused ? 'motion-paused' : ''}`}><HeroSlideshow paused={motionPaused} /><div className="hero-image-caption"><span>RUUM SINU ILULE</span><small>Salongi interjööri visualiseering</small></div><span className="hero-index">{brand.descriptor}</span><button className="hero-motion-toggle" onClick={() => setMotionPaused(paused => !paused)} aria-pressed={motionPaused} aria-label="Peata slaidiesitus">{motionPaused ? 'Jätka liikumist' : 'Peata liikumine'}</button></div>
       </section>
@@ -35,15 +36,15 @@ export default function App() {
 
       <section className="about section" id="meist">
         <div className="about-image"><Photo src="/images/salon-plan-concept.jpg" alt="Salongi ruumilahendus — ülaltvaates interjööri visualiseering" className="concept-photo" /><span className="photo-caption">RUUMILAHENDUSE VISUALISEERING</span></div>
-        <div className="about-copy"><p className="eyebrow">02 / MEIE ILUMAAILM</p><h2>Rohkem kui ilu.<br /><em>Hea tunne.</em></h2><p>Usume, et ilu algab hetkest, mil tunned end hästi. Eline Beauty & Aesthetics ühendab oma visuaalses maailmas loomulikud toonid, sooja valguse ja ruumi iseendale.</p><p>Meie filosoofia keskmes on sinu eripära. Kvaliteet tähendab läbimõeldud hoolitsust ning professionaalsus selget ja ausat nõu.</p><p className="content-note">Ruumipildid tutvustavad salongi kujunduskontseptsiooni. Teenuste ja salongi info täieneb.</p><a className="text-link" href="#spetsialistid">Tutvu meie inimestega <Arrow /></a></div>
+        <div className="about-copy"><p className="eyebrow">02 / MEIE ILUMAAILM</p><h2>Rohkem kui ilu.<br /><em>Hea tunne.</em></h2><p>Usume, et ilu algab heast enesetundest. Loomulikud toonid, soe valgus ja ruum iseendale — see on meie ilumaailm.</p><p>Meie filosoofia keskmes on sinu eripära. Kvaliteet tähendab läbimõeldud hoolitsust ning professionaalsus selget ja ausat nõu.</p><p className="content-note">Ruumipildid tutvustavad salongi kujunduskontseptsiooni. Teenuste ja salongi info täieneb.</p><a className="text-link" href="#spetsialistid">Tutvu meie inimestega <Arrow /></a></div>
       </section>
 
       <section className="section team-section" id="spetsialistid">
         <SectionHeading eyebrow="03 / MEIE INIMESED" title={<>Ilu taga on <em>inimesed.</em></>}>Saame tuttavaks. Erle Edur ja Cristina Land.</SectionHeading>
-        {specialists.map(person => <article className="specialist-feature" key={person.name}>
+        <div className="specialists-grid">{specialists.map(person => <article className="specialist-feature" key={person.name}>
           <div className="specialist-portrait"><Photo src={person.image} alt={person.alt} /></div>
-          <div className="specialist-copy"><Monogram /><p className="eyebrow">{person.role}</p><h3>{person.name}</h3><p>{person.text}</p><a className="text-link" href="#hinnakiri" onClick={() => setCategory(person.category)}>{person.linkLabel} <Arrow /></a><span className="specialist-signature">Loomulikult sina.</span></div>
-        </article>)}
+          <div className="specialist-copy"><h3>{person.name}</h3><p className="eyebrow">{person.role}</p><p>{person.text}</p><a className="text-link" href="#hinnakiri" onClick={() => setCategory(person.category)}>{person.linkLabel} <Arrow /></a><span className="specialist-signature">Loomulikult sina.</span></div>
+        </article>)}</div>
       </section>
 
       <section className="prices-section" id="hinnakiri"><div className="section">

@@ -1,0 +1,164 @@
+/* Targeted editorial refinement. Original brand, content and assets are retained. */
+:root {
+  --surface-ivory: #f8f5ec;
+  --surface-champagne: #eee6d8;
+  --ink-brown: #514331;
+  --ink-muted: #696052;
+  --line-warm: #d6c9b7;
+  --header-space: 104px;
+}
+html { scroll-padding-top: calc(var(--header-space) + 16px); }
+section[id] { scroll-margin-top: 8px; }
+.header-shell { position: sticky; top: 0; z-index: 20; height: var(--header-space); }
+.header {
+  position: relative; min-height: 104px; padding: 12px 5.5%; gap: 24px;
+  background: #f8f5ecf2; backdrop-filter: blur(12px);
+  transition: min-height .22s ease, padding .22s ease, box-shadow .22s ease;
+}
+.header .wordmark { width: 166px; transition: width .22s ease; }
+.header.is-compact { min-height: 82px; padding-block: 8px; box-shadow: 0 4px 18px #51433108; }
+.header.is-compact .wordmark { width: 140px; }
+.header-booking { min-height: 44px; white-space: nowrap; }
+.menu-toggle { min-width: 44px; min-height: 44px; padding: 10px; }
+.menu-lines { display: flex; flex-direction: column; gap: 6px; width: 21px; }
+.menu-lines span { display: block; width: 21px; height: 1px; background: var(--ink-brown); transition: transform .2s ease; }
+.menu-toggle[aria-expanded=true] .menu-lines span:first-child { transform: translateY(3.5px) rotate(45deg); }
+.menu-toggle[aria-expanded=true] .menu-lines span:last-child { transform: translateY(-3.5px) rotate(-45deg); }
+.navigation a, .text-link { min-height: 44px; }
+.hero { background: var(--surface-ivory); }
+.hero-bottom { padding-top: 26px; }
+.hero-bottom p { color: var(--ink-brown); }
+.hero-description, .section-intro, .service-card>p, .about-copy>p:not(.eyebrow) { color: var(--ink-muted); }
+.section { padding-block: 86px; }
+.section-heading { gap: 32px; margin-bottom: 36px; }
+.section-heading h2 { max-width: 750px; text-wrap: balance; }
+.section-heading .eyebrow, .about-copy .eyebrow { margin-bottom: 17px; }
+.section-intro { line-height: 1.8; max-width: 32ch; }
+.services-grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 48px 36px; }
+.service-photo { aspect-ratio: 5/4; border-radius: 180px 180px 2px 2px; }
+.service-photo img[src*="manicure-room"] { transform: scale(1.34); object-position: 50% 25%; }
+.service-title { margin-top: 21px; gap: 14px; }
+.service-title h3 { font-size: clamp(30px,3vw,42px); line-height: 1.1; }
+.service-card>p { max-width: 45ch; font-size: 13px; margin-top: 10px; }
+.circle-arrow { width: 44px; height: 44px; background: #51433185; }
+.service-image-note { font-size: 8px; bottom: 18px; left: 18px; }
+.about { padding-block: 48px 86px; gap: 7%; }
+.about-image { height: auto; aspect-ratio: 1/1.08; }
+.about-copy { max-width: 46ch; }
+.about-copy h2 { margin-bottom: 24px; }
+.about-copy>p:not(.eyebrow) { line-height: 1.85; margin-block: 16px; }
+.team-section { background: #f3eee4; border-color: var(--line-warm); }
+.specialists-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 36px; }
+.specialist-feature { display: flex; flex-direction: column; width: 100%; min-width: 0; margin: 0; background: var(--surface-champagne); }
+.specialist-feature + .specialist-feature { margin: 0; }
+.specialist-feature .specialist-portrait { position: relative; display: block; width: 100%; aspect-ratio: 4/5; min-height: 0; height: auto; overflow: hidden; }
+.specialist-feature .specialist-portrait img { position: absolute; inset: 0; width: 100%; height: 100%; max-height: none; object-fit: cover; object-position: 50% 25%; }
+.specialist-feature .specialist-portrait img[src*="erle-edur"] { object-position: 50% 22%; }
+.specialist-feature .specialist-portrait:has(img[src*="erle-edur"]) { display: block; height: auto; min-height: 0; aspect-ratio: 4/5; }
+.specialist-copy { align-self: stretch; display: flex; flex: 1; flex-direction: column; padding: 32px 36px 36px; }
+.specialist-copy h3 { font-size: clamp(38px,4vw,52px); margin: 0 0 12px; }
+.specialist-copy .eyebrow { min-height: 42px; max-width: none; font-size: 10px; line-height: 1.8; letter-spacing: 1.3px; color: var(--ink-brown); margin-bottom: 16px; }
+.specialist-copy p { max-width: 46ch; color: var(--ink-muted); }
+.specialist-copy .text-link { align-self: flex-start; margin-top: 18px; }
+.specialist-signature { margin-top: 22px; font-size: 27px; }
+.prices-section { background: var(--surface-champagne); }
+.price-categories button { min-height: 52px; padding-inline: 14px; align-items: center; gap: 16px; }
+.price-categories button[aria-pressed=true] { background: #ded0ba; color: #453725; border-color: #9e8056; }
+.price-panel { background: var(--surface-ivory); }
+.price-row { min-height: 58px; align-items: center; border-color: var(--line-warm); line-height: 1.6; }
+.price-row span:last-child { font-size: 10px; color: var(--ink-muted); text-align: right; font-variant-numeric: tabular-nums; }
+.booking-banner { background: #43392f; }
+.booking-banner .monogram { display: none; }
+.booking-banner em { color: #e7d9c9; }
+.content-note { color: var(--ink-muted); }
+.hero-slide-controls button { width: 44px; height: 44px; }
+.hero-motion-toggle { min-height: 44px; }
+.close-button { width: 44px; height: 44px; }
+.service-card, .about-image, .about-copy, .specialist-feature, .gallery-item, .section-heading { transition: opacity .45s ease, translate .45s ease; }
+.reveal-pending { opacity: 0; translate: 0 14px; }
+@media (hover:hover) and (prefers-reduced-motion:no-preference) {
+  .service-card a:hover .service-photo img { transform: scale(1.045); }
+  .service-card a:hover img[src*="manicure-room"] { transform: scale(1.38); }
+}
+@media(max-width:850px) {
+  :root { --header-space: 92px; }
+  .header { min-height: 92px; padding: 10px 5%; gap: 12px; }
+  .header .wordmark { width: 145px; }
+  .header.is-compact { min-height: 76px; padding-block: 8px; }
+  .header.is-compact .wordmark { width: 124px; }
+  .navigation { background: var(--surface-ivory); }
+  .hero-copy { padding-top: 40px; }
+  h1 { font-size: clamp(50px,7.8vw,66px); }
+  .section { padding-block: 64px; }
+  .specialists-grid { gap: 24px; }
+  .specialist-copy { padding: 26px; }
+  .specialist-copy h3 { font-size: 38px; }
+}
+@media(max-width:600px) {
+  :root { --header-space: 80px; }
+  .header { min-height: 80px; padding: 10px 5%; gap: 8px; }
+  .header .wordmark { width: 112px; }
+  .header.is-compact { min-height: 68px; padding-block: 7px; }
+  .header.is-compact .wordmark { width: 100px; }
+  .header-booking { padding: 10px 12px; font-size: 10px; gap: 10px; }
+  .hero-copy { padding: 30px 7% 22px; }
+  h1 { font-size: clamp(52px,14.2vw,64px); line-height: 1; letter-spacing: -1.6px; margin: 20px 0 16px; }
+  .hero .eyebrow { font-size: 7px; letter-spacing: 1px; gap: 8px; }
+  .hero-description { max-width: 34ch; font-size: 12px; line-height: 1.75; }
+  .hero-actions { gap: 16px; margin-top: 20px; flex-wrap: nowrap; }
+  .hero-actions .button { padding: 12px 15px; min-height: 46px; gap: 18px; }
+  .hero-actions .text-link { font-size: 10px; gap: 8px; white-space: nowrap; }
+  .hero-bottom { margin-top: 0; padding-top: 20px; }
+  .hero-bottom p { font-size: 8px; line-height: 1.8; }
+  .hero-bottom p span { font-size: 10px; }
+  .hero-visual { min-height: 390px; margin: 0 6% 24px; }
+  .hero-slide-controls { left: 10px; bottom: 14px; }
+  .hero-slide-controls button { width: 36px; height: 44px; }
+  .hero-motion-toggle { right: 12px; font-size: 9px; padding-inline: 9px; }
+  .hero-image-caption { bottom: 76px; }
+  .values-strip { padding-block: 21px; gap: 14px; }
+  .section { padding: 52px 6%; }
+  .section-heading { gap: 16px; margin-bottom: 28px; }
+  .section-heading h2, h2 { font-size: clamp(36px,10.3vw,46px); line-height: 1.08; }
+  .section-intro { max-width: 38ch; }
+  .services-grid { grid-template-columns: 1fr; gap: 34px; }
+  .service-photo { aspect-ratio: 5/4; border-radius: 140px 140px 2px 2px; }
+  .service-title { margin-top: 18px; }
+  .service-title h3 { font-size: 32px; }
+  .service-card>p { font-size: 12px; max-width: 38ch; }
+  .about { gap: 28px; padding-top: 12px; }
+  .about-image { height: auto; aspect-ratio: 1/1.05; }
+  .about-copy { padding: 0 2%; }
+  .about-copy h2 { margin-bottom: 20px; }
+  .specialists-grid { grid-template-columns: 1fr; gap: 30px; }
+  .specialist-feature .specialist-portrait { height: auto; min-height: 0; aspect-ratio: 4/5; }
+  .specialist-copy { padding: 26px 24px 30px; }
+  .specialist-copy h3 { font-size: 40px; }
+  .specialist-copy .eyebrow { min-height: 0; font-size: 9px; margin-bottom: 16px; }
+  .prices-layout { display: block; min-width: 0; }
+  .price-categories { display: flex; flex-direction: row; gap: 8px; overflow-x: auto; max-width: 100%; padding: 0 0 12px; margin-bottom: 18px; scrollbar-width: thin; scrollbar-color: #b7a58a transparent; }
+  .price-categories button { flex: 0 0 auto; white-space: nowrap; min-height: 48px; padding: 12px 16px; border: 1px solid var(--line-warm); font-size: 11px; }
+  .price-categories .arrow-icon { display: none; }
+  .price-panel { padding: 25px 20px; min-height: 280px; }
+  .price-panel h3 { font-size: 30px; }
+  .price-row { gap: 12px; min-height: 58px; font-size: 12px; }
+  .price-row span:last-child { font-size: 9px; white-space: nowrap; }
+  .booking-banner { padding: 60px 6%; }
+}
+@media(max-width:359px) {
+  .header { gap: 4px; }
+  .header .wordmark { width: 100px; }
+  .header.is-compact .wordmark { width: 94px; }
+  .header-booking { padding-inline: 9px; font-size: 9px; }
+  .hero-actions { gap: 12px; }
+  .hero-actions .button { gap: 12px; padding-inline: 12px; font-size: 10px; }
+  .hero-actions .text-link { font-size: 9px; }
+  .hero-visual { min-height: 355px; }
+  .hero-motion-toggle { right: 8px; }
+  .hero-slide-controls { left: 5px; }
+  .hero-slide-controls button { width: 34px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .reveal-pending { opacity: 1; translate: none; }
+  .header, .header .wordmark, .menu-lines span { transition: none; }
+}

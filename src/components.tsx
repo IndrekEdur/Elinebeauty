@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { brand, site } from './content';
 
 export function BrandLogo({ decorative = false }: { decorative?: boolean }) {
-  return <span className="brand-logo"><img src="/images/eline-logo-hq-transparent.svg" alt={decorative ? '' : 'eliné — Beauty · Hair · Aesthetics'} width="1180" height="522" /></span>;
+  return <span className="brand-logo"><img src="/images/eline-logo-hq-transparent.svg" alt={decorative ? '' : 'eliné — Beauty · Hair · Aesthetics'} width="940" height="435" /></span>;
 }
 
 export function Monogram() {
@@ -51,13 +51,19 @@ export function SectionHeading({ eyebrow, title, children }: { eyebrow: string; 
 export function Header({ onBooking }: { onBooking: () => void }) {
   const [open, setOpen] = useState(false);
   const toggle = useRef<HTMLButtonElement>(null);
+  const [compact, setCompact] = useState(false);
+  useEffect(() => {
+    const update = () => setCompact(window.scrollY > 48);
+    update(); window.addEventListener('scroll', update, { passive: true });
+    return () => window.removeEventListener('scroll', update);
+  }, []);
   const links = [['Teenused', 'teenused'], ['Meist', 'meist'], ['Spetsialistid', 'spetsialistid'], ['Hinnakiri', 'hinnakiri'], ['Kontakt', 'kontakt']];
-  return <header className="header" onKeyDown={e => { if (e.key === 'Escape') { setOpen(false); toggle.current?.focus(); } }}>
+  return <div className="header-shell"><header className={`header ${compact ? 'is-compact' : ''}`} onKeyDown={e => { if (e.key === 'Escape') { setOpen(false); toggle.current?.focus(); } }}>
     <Wordmark />
-    <button ref={toggle} className="menu-toggle" aria-expanded={open} aria-controls="navigation" onClick={() => setOpen(!open)}>{open ? 'Sulge ×' : 'Menüü ☰'}</button>
+    <button ref={toggle} className="menu-toggle" aria-expanded={open} aria-controls="navigation" aria-label={open ? 'Sulge menüü' : 'Menüü'} onClick={() => setOpen(!open)}><span className="menu-lines" aria-hidden="true"><span /><span /></span></button>
     <nav id="navigation" className={open ? 'navigation is-open' : 'navigation'} aria-label="Peamenüü">{links.map(([label, id]) => <a key={id} href={`#${id}`} onClick={() => setOpen(false)}>{label}</a>)}</nav>
     <BookingButton className="header-booking" onClick={onBooking} />
-  </header>;
+  </header></div>;
 }
 
 const heroImages = [
@@ -95,4 +101,29 @@ export function HeroSlideshow({ paused }: { paused: boolean }) {
   return <><div className="hero-slideshow" ref={slidesRef}>{heroImages.map((item, index) =>
     <img key={item.src} src={item.src} alt={item.alt} aria-hidden={index !== active} className={`hero-slide ${index === active ? 'is-active' : ''}`} loading="eager" fetchPriority={index === 0 ? 'high' : 'low'} decoding="async" onLoad={() => setReady(current => current.includes(index) ? current : [...current, index].sort())} />
   )}</div><div className="hero-slide-controls" role="group" aria-label="Vali avapilt">{heroImages.map((item, index) => <button key={item.src} aria-label={item.alt} aria-pressed={active === index} onClick={() => setActive(index)}><span /></button>)}</div></>;
+}
+
+/** Reveal only offscreen content; prerendered and reduced-motion content stays visible. */
+export function useScrollReveal() {
+  useEffect(() => {
+    const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const nodes = Array.from(document.querySelectorAll<HTMLElement>('.service-card, .about-image, .about-copy, .specialist-feature, .gallery-item, .section-heading'));
+    if (!('IntersectionObserver' in window)) return;
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.remove('reveal-pending');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08 });
+    if (!motion.matches) nodes.forEach(node => {
+      if (node.getBoundingClientRect().top >= window.innerHeight) {
+        node.classList.add('reveal-pending'); observer.observe(node);
+      }
+    });
+    const showAll = () => { if (motion.matches) nodes.forEach(node => node.classList.remove('reveal-pending')); };
+    motion.addEventListener('change', showAll);
+    return () => { observer.disconnect(); motion.removeEventListener('change', showAll); nodes.forEach(node => node.classList.remove('reveal-pending')); };
+  }, []);
 }
