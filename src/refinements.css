@@ -173,3 +173,18 @@ section[id] { scroll-margin-top: 8px; }
   .reveal-pending { opacity: 1; translate: none; }
   .header, .header .wordmark, .menu-lines span { transition: none; }
 }
+/* Quiet, reusable legal/contact footer. */
+.company-footer{display:grid;grid-template-columns:1fr .8fr 1.3fr;gap:32px 5%;align-items:start}
+.footer-brand p{font-size:12px;color:var(--ink-muted);margin:16px 0 10px}
+.company-footer h2{font-family:var(--font-sans);font-size:11px;font-weight:500;line-height:1.5;letter-spacing:1.1px;margin:0 0 18px;color:var(--ink-brown)}
+.footer-contact a{display:flex;align-items:center;min-height:44px;font-size:13px;width:fit-content;border-bottom:1px solid var(--line-warm)}
+.footer-company p,.iban-row{font-size:11px;color:var(--ink-muted);line-height:1.8}
+.footer-company p+p{margin-top:5px}.iban-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:8px}
+.iban-number{font-variant-numeric:tabular-nums;user-select:all;overflow-wrap:anywhere}
+.copy-iban{font-size:10px;background:transparent;color:var(--ink-brown);border:1px solid var(--line-warm);min-height:44px;min-width:60px;padding:8px 10px;transition:background .2s}
+.copy-iban:hover{background:var(--surface-champagne)}.copy-iban:disabled{opacity:.6}
+.footer-company .copy-status{min-height:40px;max-width:40ch;margin-top:6px;font-size:10px}
+.company-footer .footer-bottom{grid-column:1/-1;margin-top:0}
+.contact-details a{display:inline-flex;align-items:center;min-height:44px;border-bottom:1px solid var(--line-warm)}
+@media(max-width:850px){.company-footer{grid-template-columns:1fr 1fr}.footer-company{grid-column:1/-1}}
+@media(max-width:600px){.company-footer{grid-template-columns:1fr;gap:26px}.footer-company{grid-column:auto}.footer-contact,.footer-company{border-top:1px solid var(--line-warm);padding-top:24px}.company-footer h2{margin-bottom:10px}.footer-company p,.iban-row{font-size:12px}.company-footer .footer-bottom{font-size:9px}}

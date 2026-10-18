@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { brand, site } from './content';
+import { brand, business, site } from './content';
 
 export function BrandLogo({ decorative = false }: { decorative?: boolean }) {
   return <span className="brand-logo"><img src="/images/eline-logo-hq-transparent.svg" alt={decorative ? '' : 'eliné — Beauty · Hair · Aesthetics'} width="940" height="435" /></span>;
@@ -126,4 +126,25 @@ export function useScrollReveal() {
     motion.addEventListener('change', showAll);
     return () => { observer.disconnect(); motion.removeEventListener('change', showAll); nodes.forEach(node => node.classList.remove('reveal-pending')); };
   }, []);
+}
+
+export function CompanyFooter() {
+  const [copyStatus, setCopyStatus] = useState('');
+  const [copying, setCopying] = useState(false);
+  const copyIban = async () => {
+    setCopying(true); setCopyStatus('');
+    try {
+      if (!navigator.clipboard?.writeText) throw new Error('Clipboard unavailable');
+      await navigator.clipboard.writeText(business.iban);
+      setCopyStatus('IBAN kopeeritud.');
+    } catch {
+      setCopyStatus('Kopeerimine ei õnnestunud. Vali kontonumber ja kopeeri käsitsi.');
+    } finally { setCopying(false); }
+  };
+  return <footer className="footer company-footer">
+    <div className="footer-brand"><Wordmark /><p>Ilusalong ja esteetiline kliinik</p><a href="#avaleht" className="text-link">Tagasi üles ↑</a></div>
+    <div className="footer-contact"><h2>Kontakt</h2><a href={business.phoneHref}>{business.phone}</a><a href={`mailto:${business.email}`}>{business.email}</a></div>
+    <div className="footer-company"><h2>Ettevõtte rekvisiidid</h2><p>{business.legalName}</p><p>{business.bank}</p><div className="iban-row"><span>IBAN: <span className="iban-number">{business.iban}</span></span><button type="button" className="copy-iban" onClick={copyIban} disabled={copying} aria-label="Kopeeri IBAN" aria-describedby="iban-copy-status">{copying ? 'Kopeerin…' : 'Kopeeri'}</button></div><p id="iban-copy-status" className="copy-status" role="status" aria-live="polite" aria-atomic="true">{copyStatus}</p></div>
+    <div className="footer-bottom"><span>© {new Date().getFullYear()} {business.brandName}</span><span>Teenuste info täieneb · ruumipildid on visualiseeringud</span></div>
+  </footer>;
 }
