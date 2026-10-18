@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { brand, site } from './content';
 
 export function BrandLogo({ decorative = false }: { decorative?: boolean }) {
-  return <span className="brand-logo"><img src="/images/eline-logo-transparent.svg" alt={decorative ? '' : 'eliné — Beauty · Hair · Aesthetics'} width="1180" height="522" /></span>;
+  return <span className="brand-logo"><img src="/images/eline-logo-hq-transparent.svg" alt={decorative ? '' : 'eliné — Beauty · Hair · Aesthetics'} width="1180" height="522" /></span>;
 }
 
 export function Monogram() {
@@ -69,8 +69,15 @@ const heroImages = [
 
 export function HeroSlideshow({ paused }: { paused: boolean }) {
   const [active, setActive] = useState(0);
+  const slidesRef = useRef<HTMLDivElement>(null);
   const [reduced, setReduced] = useState(true);
   const [ready, setReady] = useState<number[]>([0]);
+  useEffect(() => {
+    // Prerendered images may finish loading before hydration attaches onLoad.
+    const loaded = Array.from(slidesRef.current?.querySelectorAll('img') ?? [])
+      .flatMap((img, index) => img.complete && img.naturalWidth > 0 ? [index] : []);
+    setReady(current => [...new Set([...current, ...loaded])].sort());
+  }, []);
   useEffect(() => {
     const query = window.matchMedia('(prefers-reduced-motion: reduce)');
     const update = () => setReduced(query.matches);
@@ -85,7 +92,7 @@ export function HeroSlideshow({ paused }: { paused: boolean }) {
     }), 4000);
     return () => window.clearInterval(timer);
   }, [paused, reduced, ready]);
-  return <div className="hero-slideshow">{heroImages.map((item, index) =>
+  return <><div className="hero-slideshow" ref={slidesRef}>{heroImages.map((item, index) =>
     <img key={item.src} src={item.src} alt={item.alt} aria-hidden={index !== active} className={`hero-slide ${index === active ? 'is-active' : ''}`} loading="eager" fetchPriority={index === 0 ? 'high' : 'low'} decoding="async" onLoad={() => setReady(current => current.includes(index) ? current : [...current, index].sort())} />
-  )}</div>;
+  )}</div><div className="hero-slide-controls" role="group" aria-label="Vali avapilt">{heroImages.map((item, index) => <button key={item.src} aria-label={item.alt} aria-pressed={active === index} onClick={() => setActive(index)}><span /></button>)}</div></>;
 }
