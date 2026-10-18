@@ -67,10 +67,10 @@ export function Header({ onBooking }: { onBooking: () => void }) {
 }
 
 const heroImages = [
-  { src: '/images/salon-front-concept.jpg', alt: 'Salongi vastuvõtuala visualiseering' },
-  { src: '/images/facial-room-concept.jpg', alt: 'Näohooldusruumi visualiseering' },
-  { src: '/images/consultation-room-concept.jpg', alt: 'Konsultatsiooniruumi visualiseering' },
-  { src: '/images/manicure-room-concept.jpg', alt: 'Maniküüriala visualiseering' },
+  { src: '/images/salon-front-concept.jpg', width: 1280, height: 590, alt: 'Salongi vastuvõtuala visualiseering' },
+  { src: '/images/facial-room-concept.jpg', width: 1254, height: 1254, alt: 'Näohooldusruumi visualiseering' },
+  { src: '/images/consultation-room-concept.jpg', width: 1280, height: 972, alt: 'Konsultatsiooniruumi visualiseering' },
+  { src: '/images/manicure-room-concept.jpg', width: 1280, height: 831, alt: 'Maniküüriala visualiseering' },
 ];
 
 export function HeroSlideshow({ paused }: { paused: boolean }) {
@@ -99,7 +99,7 @@ export function HeroSlideshow({ paused }: { paused: boolean }) {
     return () => window.clearInterval(timer);
   }, [paused, reduced, ready]);
   return <><div className="hero-slideshow" ref={slidesRef}>{heroImages.map((item, index) =>
-    <img key={item.src} src={item.src} alt={item.alt} aria-hidden={index !== active} className={`hero-slide ${index === active ? 'is-active' : ''}`} loading="eager" fetchPriority={index === 0 ? 'high' : 'low'} decoding="async" onLoad={() => setReady(current => current.includes(index) ? current : [...current, index].sort())} />
+    <img key={item.src} src={item.src} width={item.width} height={item.height} alt={item.alt} aria-hidden={index !== active} className={`hero-slide ${index === active ? 'is-active' : ''}`} loading="eager" fetchPriority={index === 0 ? 'high' : 'low'} decoding="async" onLoad={() => setReady(current => current.includes(index) ? current : [...current, index].sort())} />
   )}</div><div className="hero-slide-controls" role="group" aria-label="Vali avapilt">{heroImages.map((item, index) => <button key={item.src} aria-label={item.alt} aria-pressed={active === index} onClick={() => setActive(index)}><span /></button>)}</div></>;
 }
 

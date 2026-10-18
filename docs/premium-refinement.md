@@ -29,3 +29,12 @@ Tootmiskeskkonda ei avaldata. GitHub Actionsi, Zone'i ühenduse ja lukustusmuutu
 2. Ühendada pärast konto loomist salongi kinnitatud SalonLife'i broneerimislink.
 3. Kinnitada välise kaardi ja broneerimise privaatsusteave ning kontaktvormi vajadus.
 4. Pärast omaniku kinnitatud avaldamist teha päris iPhone'i/Safari kontroll ja mõõta avaliku lehe Core Web Vitals näitajaid.
+
+## Landing page järelviimistlus
+
+- Hero mobiilivahede täiendav vähendamine olemasolevaid tekste ja pealkirja suurust muutmata.
+- Päise mobiili broneerimisnupu väiksem horisontaalne polsterdus; 44 px puuteala säilib. Desktop'i päis muutmata.
+- Piltidel väga kerge kontrast 1.035, küllastus muutmata; allserva tumendus piirdub tekstialaga. Algfotod, kaarekujuline konteiner ja crop säilivad. Slaididele lisatud originaalmõõdud.
+- CTA ikoonide ühtlustatud mõõtmed ja joondus, hover ilma üles-alla hüppeta. Teenuste pealkirjade all peened eraldusjooned; kategooriaid ei dubleerita.
+- Mobiilimenüü avaneb ja sulgub 180 ms üleminekuga. Suletud menüü on peidetud ka klaviatuuri ja abitehnoloogia eest. Reduced motion eemaldab üleminekud.
+- Muudetud failid: src/refinements.css, src/components.tsx ja käesolev dokument. Turva-, broneerimis- ja deployment-loogika muutmata.
