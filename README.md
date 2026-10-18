@@ -146,3 +146,7 @@ Codexi pilvevõimaluste olemasolu sõltub kontost ja ligipääsust. Pilveühendu
 - [Python: FTP_TLS](https://docs.python.org/3/library/ftplib.html#ftplib.FTP_TLS)
 - [GitHub: deployments ja environments](https://docs.github.com/en/actions/reference/workflows-and-actions/deployments-and-environments)
 - [OpenAI: Codex Cloud](https://developers.openai.com/codex/cloud/)
+
+### Bränd ja inimesed
+
+Brändi nimi ja spetsialistide andmed asuvad failis src/content.ts. Omaniku kinnitatud nimi on ELINE Beauty & Aesthetics; Cristina Land on juuksur. Tema portree on omaniku saadetud. Salongi ruumipildid on märgistatud visualiseeringutena. Uue kujunduse stiilid on src/brand.css failis. Pildiviited ja päritolu: IMAGE-CREDITS.md.

@@ -1,13 +1,25 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { site } from './content';
+import { brand, site } from './content';
+
+export function BrandLogo({ decorative = false }: { decorative?: boolean }) {
+  return <span className="brand-logo"><img src="/images/eline-logo-hq-transparent.svg" alt={decorative ? '' : 'eliné — Beauty · Hair · Aesthetics'} width="1180" height="522" /></span>;
+}
+
+export function Monogram() {
+  return <span className="monogram" aria-hidden="true"><BrandLogo decorative /></span>;
+}
+
+export function Wordmark() {
+  return <a className="wordmark" href="#avaleht" aria-label={`${brand.fullName} avaleht`}><BrandLogo /></a>;
+}
 
 export function Arrow() {
-  return <span aria-hidden="true">↗</span>;
+  return <svg className="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" /></svg>;
 }
 
 export function Photo({ src, alt, className = '', eager = false }: { src: string; alt: string; className?: string; eager?: boolean }) {
   const [failed, setFailed] = useState(false);
-  return failed ? <div className={`photo-fallback ${className}`} role="img" aria-label={alt}><span>ELINE BEAUTY<small>Pilt pole hetkel saadaval</small></span></div>
+  return failed ? <div className={`photo-fallback ${className}`} role="img" aria-label={alt}><span>{brand.fullName}<small>Pilt pole hetkel saadaval</small></span></div>
     : <img className={className} src={src} alt={alt} loading={eager ? 'eager' : 'lazy'} fetchPriority={eager ? 'high' : 'auto'} decoding="async" onError={() => setFailed(true)} />;
 }
 
@@ -41,9 +53,46 @@ export function Header({ onBooking }: { onBooking: () => void }) {
   const toggle = useRef<HTMLButtonElement>(null);
   const links = [['Teenused', 'teenused'], ['Meist', 'meist'], ['Spetsialistid', 'spetsialistid'], ['Hinnakiri', 'hinnakiri'], ['Kontakt', 'kontakt']];
   return <header className="header" onKeyDown={e => { if (e.key === 'Escape') { setOpen(false); toggle.current?.focus(); } }}>
-    <a className="wordmark" href="#avaleht" aria-label="Eline Beauty avaleht">ELINE<span>BEAUTY</span></a>
+    <Wordmark />
     <button ref={toggle} className="menu-toggle" aria-expanded={open} aria-controls="navigation" onClick={() => setOpen(!open)}>{open ? 'Sulge ×' : 'Menüü ☰'}</button>
     <nav id="navigation" className={open ? 'navigation is-open' : 'navigation'} aria-label="Peamenüü">{links.map(([label, id]) => <a key={id} href={`#${id}`} onClick={() => setOpen(false)}>{label}</a>)}</nav>
     <BookingButton className="header-booking" onClick={onBooking} />
   </header>;
+}
+
+const heroImages = [
+  { src: '/images/salon-front-concept.jpg', alt: 'Salongi vastuvõtuala visualiseering' },
+  { src: '/images/facial-room-concept.jpg', alt: 'Näohooldusruumi visualiseering' },
+  { src: '/images/consultation-room-concept.jpg', alt: 'Konsultatsiooniruumi visualiseering' },
+  { src: '/images/manicure-room-concept.jpg', alt: 'Maniküüriala visualiseering' },
+];
+
+export function HeroSlideshow({ paused }: { paused: boolean }) {
+  const [active, setActive] = useState(0);
+  const slidesRef = useRef<HTMLDivElement>(null);
+  const [reduced, setReduced] = useState(true);
+  const [ready, setReady] = useState<number[]>([0]);
+  useEffect(() => {
+    // Prerendered images may finish loading before hydration attaches onLoad.
+    const loaded = Array.from(slidesRef.current?.querySelectorAll('img') ?? [])
+      .flatMap((img, index) => img.complete && img.naturalWidth > 0 ? [index] : []);
+    setReady(current => [...new Set([...current, ...loaded])].sort());
+  }, []);
+  useEffect(() => {
+    const query = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const update = () => setReduced(query.matches);
+    update(); query.addEventListener('change', update);
+    return () => query.removeEventListener('change', update);
+  }, []);
+  useEffect(() => {
+    if (paused || reduced || ready.length < 2) return;
+    const timer = window.setInterval(() => setActive(current => {
+      const next = ready.find(index => index > current);
+      return next ?? ready[0];
+    }), 4000);
+    return () => window.clearInterval(timer);
+  }, [paused, reduced, ready]);
+  return <><div className="hero-slideshow" ref={slidesRef}>{heroImages.map((item, index) =>
+    <img key={item.src} src={item.src} alt={item.alt} aria-hidden={index !== active} className={`hero-slide ${index === active ? 'is-active' : ''}`} loading="eager" fetchPriority={index === 0 ? 'high' : 'low'} decoding="async" onLoad={() => setReady(current => current.includes(index) ? current : [...current, index].sort())} />
+  )}</div><div className="hero-slide-controls" role="group" aria-label="Vali avapilt">{heroImages.map((item, index) => <button key={item.src} aria-label={item.alt} aria-pressed={active === index} onClick={() => setActive(index)}><span /></button>)}</div></>;
 }

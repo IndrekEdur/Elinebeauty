@@ -15,3 +15,19 @@ Fotod on alla laaditud Unsplashi pildiserverist. Need on visuaalse kavandi kohat
 | person-3.jpg | https://images.unsplash.com/photo-1544005313-94ddf0286df2 |
 
 Litsents: https://unsplash.com/license . Enne avaldamist eelista salongi enda loaga fotosid ja kinnita vajadusel isiku-/kaubamärgiõigused. Kohalikke faile võib laadimise kiirendamiseks optimeerida; säilita päritoluandmed.
+
+## Omaniku saadetud materjalid
+
+- cristina-land.jpg: omaniku antud Cristina Landi portree; nimi ja amet Juuksur on omaniku kinnitatud. Portreed ei ole muudetud.
+- salon-front-concept.jpg ja salon-plan-concept.jpg: omaniku saadetud salongi visualiseeringud, mitte kinnitatud fotod olemasolevast salongist. Algfailid säilivad; paigutust kärbitakse CSS-iga.
+- ERLIN-i brändinäidis on värvide ja tüpograafia inspiratsioon. Veebilehe kinnitatud nimi on ELINE Beauty & Aesthetics.
+
+- facial-room-concept.jpg, consultation-room-concept.jpg ja manicure-room-concept.jpg: omaniku saadetud täiendavad ruumide visualiseeringud. Kasutatud teenuste kaartidel ja galeriis; ei kujuta kinnitatud töötajaid ega tehtud protseduure. Algfailid muutmata.
+
+- tatari-parking-guide.jpg: omaniku saadetud märgistatud kaardikuva, muutmata; parkimisala orienteeruv juhispilt. Omanik kinnitas tasulise parkimise vastavalt kohapealsele korrale.
+
+- eline-logo.jpg: omaniku kinnitatud eliné logo (Beauty · Hair · Aesthetics). Algfail muutmata; CSS piirab välisservade nähtavust. Asendab varasema E-monogrammi.
+
+- erle-edur.jpg: omaniku saadetud Erle Eduri portree. Nimi ja rollid (esteetilise meditsiini õde, juuksur, iluteenindaja) pärinevad omanikult. Väikese resolutsiooniga originaal on muutmata.
+
+- erle-edur-portrait-hq.jpg: omaniku saadetud suurema eraldusvõimega Erle portree, asendab veebilehel varasema väikese foto. Algfail on muutmata.
