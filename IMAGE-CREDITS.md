@@ -31,3 +31,7 @@ Litsents: https://unsplash.com/license . Enne avaldamist eelista salongi enda lo
 - erle-edur.jpg: omaniku saadetud Erle Eduri portree. Nimi ja rollid (esteetilise meditsiini õde, juuksur, iluteenindaja) pärinevad omanikult. Väikese resolutsiooniga originaal on muutmata.
 
 - erle-edur-portrait-hq.jpg: omaniku saadetud suurema eraldusvõimega Erle portree, asendab veebilehel varasema väikese foto. Algfail on muutmata.
+
+## Parkimiskaart (2026-10-25)
+
+`public/images/tatari-parking-map.webp`: omaniku ülesandega lisatud kaart (Parkla 1, Parkla 2, Tatari 25). Algne 1448 × 1086 PNG teisendatud samas mõõdus WebP-ks (quality 93), ilma kärpimise, teksti lisamise või sisulise muutmiseta. Asendab veebilehel `tatari-parking-guide.jpg` viite; parkimistingimuste selgitused säilivad.

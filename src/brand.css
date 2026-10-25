@@ -79,3 +79,7 @@
 @media(prefers-reduced-motion:reduce){.hero-visual .hero-slide{animation:none!important;transition:none!important}}
 
 .hero-slide-controls{position:absolute;bottom:14px;left:22px;z-index:3;display:flex;gap:2px}.hero-slide-controls button{display:grid;place-items:center;width:32px;height:40px;background:transparent;border:0}.hero-slide-controls button span{width:8px;height:8px;background:#ffffff70;border:1px solid #fff;border-radius:50%}.hero-slide-controls button[aria-pressed=true] span{background:#fff}
+
+/* Keep the owner-provided parking map legible across the full contact section. */
+.contact-section > .parking-guide { width: 100%; }
+.parking-guide img { aspect-ratio: 1448 / 1086; object-fit: contain; }
