@@ -1,14 +1,10 @@
-/** Kinnita kuupäev, kellaaeg, programm ja kontaktid enne avaldamist. */
+/** Kinnita kontaktid enne avaldamist. */
 export const invitation = {
-  date: 'Kuupäev selgumisel',
-  time: 'Kellaaeg selgumisel',
+  date: '28. november',
+  time: '18:00',
   address: 'Tatari 25, Tallinn',
-  dressCode: 'Riietusstiil täpsustamisel',
-  programme: [
-    { time: 'Aeg lisandub', title: 'Õhtu algus', description: 'Siia lisandub külaliste vastuvõtu kirjeldus.' },
-    { time: 'Aeg lisandub', title: 'Uus peatükk', description: 'Siia lisandub avamishetke programm.' },
-    { time: 'Aeg lisandub', title: 'Aeg koos olemiseks', description: 'Siia lisandub õhtu jätku kirjeldus.' },
-  ],
+  productNote: 'Avamispeol on CHI ja Eudermi tooted soodushindadega.',
+  giftNote: 'Esimest 50 osalejat ootab kotikene kingitustega.',
   instagramUrl: null as string | null,
   email: null as string | null,
 };

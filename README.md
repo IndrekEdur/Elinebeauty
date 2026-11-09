@@ -34,7 +34,7 @@ Kutse on avalehest eraldatud Vite'i mitmeleheline sisenemispunkt (`kutse/index.h
 `src/invitation/` sisaldab ainult kutse komponente, stiile, kohalike fontide importi ja
 muudetavat ürituse sisu (`content.ts`). Avalehe komponendid ja stiilid jäävad samaks.
 Build eelrenderdab mõlemad lehed: `dist/index.html` ja `dist/kutse/index.html`.
-Pildid ja fondid on kohalikud; kutse taaskasutab senist tekstilogo ja illustratiivset hero-fotot.
+Pildid ja fondid on kohalikud; kutse taaskasutab senist tekstilogo. Kutse on fotota.
 
 Eelvaade: `npm ci`, `npm run build`, `npm run preview`, seejärel
 `http://127.0.0.1:4173/kutse`. Arenduseks `npm run dev` ja `/kutse`.
@@ -45,8 +45,7 @@ Praegune FTPS-skript laadib rekursiivselt üles ka selle kataloogi. Töövoogu e
 Zone'i seadeid pole muudetud. Serveri tegelik DirectoryIndex/kataloogisuunamine
 tuleb kinnitada hilisema lubatud avaldamise käigus; serveriga pole ühendust loodud.
 
-Enne avaldamist täida `src/invitation/content.ts`: kuupäev, kellaaeg, programm,
-riietusstiil, kontrollitud Instagrami URL ja e-post. Aadress on tellija antud
+Enne avaldamist täida `src/invitation/content.ts`: kontrollitud Instagrami URL ja e-post. Aadress on tellija antud
 Tatari 25, Tallinn. Kutse on seni `noindex, nofollow`; eemalda see meta alles
 siis, kui kutse võib otsingusse jõuda. Kutset pole lisatud avalehe menüüsse ega sitemap'i.
 

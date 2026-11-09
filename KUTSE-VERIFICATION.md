@@ -7,7 +7,7 @@ Lähteharu: `main`, lähtecommit `5de8f43`. Tööharu: `feat/kutse-invitation`.
 - `npm test`: kõik 23 olemasolevat mock-FTPS testi edukad; päris FTP ühendust ei loodud.
 - `npm run build`: edukas, mõlema lehe HTML eelrenderdatud.
 - `git diff --check`: edukas.
-- Chromium: 320, 390, 768 ja 1440 px; horisontaalset ülevoolu pole, foto laeb.
+- Chromium: 320, 390, 768 ja 1440 px; horisontaalset ülevoolu pole. Kutse on fotota; programm ja dress code eemaldatud.
 - Otse `/kutse` avamine suunatakse lokaalses preview's `/kutse/` peale ja näitab kutset.
 - RSVP: nimi, jah/ei ja kaaslane; eitamisel kaaslase valikud keelatud.
 - Demovormi saatmine ei tekita võrgupäringut; tagasiside ütleb, et andmeid ei saadetud.
@@ -25,3 +25,5 @@ ega testide lähtekoodi ei muudetud.
 Zone'i tegelikku `/kutse` vastust pole kontrollitud, sest avaldamist ega serveri
 ühendust pole lubatud. Lahendus kasutab standardset kataloogi `index.html`-iga,
 mida olemasolev rekursiivne FTPS üleslaadija toetab.
+
+Viimane sisukontroll: 28. november, 18:00; esimese 50 osaleja kingikoti teade ning CHI ja Eudermi soodushindade teade olemas. Kõik brauseri- ja build-kontrollid korratud.
