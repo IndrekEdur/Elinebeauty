@@ -10,7 +10,17 @@ export const invitation = {
 };
 
 export type Rsvp = { name: string; attending: boolean; plusOne: boolean };
-/** Ühenda siin hiljem backend. Demo ei salvesta ega edasta isikuandmeid. */
-export async function submitRsvp(_response: Rsvp): Promise<{ mode: 'demo' }> {
-  return { mode: 'demo' };
+export async function submitRsvp(response: Rsvp, website: string): Promise<void> {
+  const result = await fetch('/kutse/rsvp.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+    body: JSON.stringify({ ...response, website }),
+    signal: AbortSignal.timeout(15000),
+  });
+  const data = await result.json().catch(() => null);
+  if (!result.ok || data?.ok !== true) {
+    throw new Error(result.status === 429
+      ? 'Oled hiljuti vastuse saatnud. Palun oota minut ja proovi uuesti.'
+      : 'Vastust ei õnnestunud saata. Proovi hiljem uuesti või kirjuta info@elinebeauty.ee.');
+  }
 }

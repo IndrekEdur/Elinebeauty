@@ -11,24 +11,26 @@ function RsvpForm() {
   const [busy, setBusy] = useState(false);
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (busy) return;
     const data = new FormData(e.currentTarget);
     setBusy(true);
     setStatus('');
     try {
-      await submitRsvp({ name: String(data.get('name')).trim(), attending: attending === 'yes', plusOne: attending === 'yes' && data.get('plusOne') === 'yes' });
-      setStatus('Demovormi proovimine õnnestus. Vastust ei saadetud ega salvestatud. Osalemise kinnitamine avaneb peagi.');
-    } catch {
-      setStatus('Vastuse töötlemine ebaõnnestus. Palun proovi uuesti.');
+      await submitRsvp({ name: String(data.get('name')).trim(), attending: attending === 'yes', plusOne: attending === 'yes' && data.get('plusOne') === 'yes' }, String(data.get('website') ?? ''));
+      setStatus('Aitäh! Sinu vastus on saadetud.');
+    } catch (error) {
+      setStatus(error instanceof Error && error.name !== 'TimeoutError' ? error.message : 'Saatmine katkes. Kui vastus ei jõudnud kohale, proovi uuesti või kirjuta info@elinebeauty.ee.');
     } finally { setBusy(false); }
   }
-  return <form onSubmit={submit} aria-describedby="rsvp-note">
-    <p id="rsvp-note" className="invite-note">Demovorm · vastuseid veel ei saadeta ega salvestata.</p>
+  return <form onSubmit={submit} method="post" action="/kutse/rsvp.php" aria-describedby="rsvp-note" aria-busy={busy}>
+    <p id="rsvp-note" className="invite-note">Sinu nimi ja osalemise valikud saadetakse Eline Beautyle aadressil info@elinebeauty.ee ainult avamispeo korraldamiseks.</p>
+    <div className="invite-honeypot" aria-hidden="true"><label>Veebileht<input name="website" tabIndex={-1} autoComplete="off" /></label></div>
     <label className="invite-name" htmlFor="guest-name">Sinu nimi<input id="guest-name" name="name" autoComplete="name" required maxLength={120} pattern=".*\S.*" placeholder="Ees- ja perekonnanimi" /></label>
     <fieldset><legend>Kas tuled meiega tähistama?</legend><div className="invite-options">{[['yes', 'Jah, tulen'], ['no', 'Kahjuks ei saa']].map(([value, label]) => <label key={value}><input type="radio" name="attending" value={value} required checked={attending === value} onChange={() => { setAttending(value); setStatus(''); }} /><span>{label}</span></label>)}</div></fieldset>
     <fieldset disabled={attending !== 'yes'}><legend>Kas võtad kaaslase kaasa?</legend><div className="invite-options">{[['yes', 'Jah, koos kaaslasega'], ['no', 'Tulen üksi']].map(([value, label]) => <label key={value}><input type="radio" name="plusOne" value={value} required={attending === 'yes'} /><span>{label}</span></label>)}</div></fieldset>
-    <button className="invite-button" type="submit" disabled={busy}>{busy ? 'Töötlen…' : 'Proovi vastuse saatmist'}<span aria-hidden="true">↗</span></button>
+    <button className="invite-button" type="submit" disabled={busy}>{busy ? 'Töötlen…' : 'Saada vastus'}<span aria-hidden="true">↗</span></button>
     <p role="status" className="invite-status">{status}</p>
-    <noscript>Vormi proovimiseks luba JavaScript. Osalemise kinnitamine pole veel avatud.</noscript>
+    <noscript>Vastamiseks luba JavaScript või kirjuta info@elinebeauty.ee.</noscript>
   </form>;
 }
 
@@ -42,7 +44,7 @@ export default function Invitation() {
       </section>
       <section className="invite-facts" aria-label="Peo toimumise info"><div><p className="invite-kicker">KUUPÄEV</p><p>{event.date}</p></div><div><p className="invite-kicker">KELLAAEG</p><p>{event.time}</p></div><div><p className="invite-kicker">KOHTUME</p><p>{event.address}</p></div></section>
       <section className="invite-letter" aria-labelledby="letter-title"><span className="invite-spark" aria-hidden="true">✳</span><p className="invite-kicker">UUE PEATÜKI ALGUSES</p><h2 id="letter-title">Ilu on veel ilusam,<br />kui seda <em>jagada.</em></h2><p>Ootame sind Eline Beauty avamispeole, et tähistada koos ühe ilusa unistuse algust. Õhtu, kus on ruumi kohtumistele, headele soovidele ja lihtsalt koos olemisele.</p><p>Tule ja jaga meiega seda erilist hetke.<br />Sinu kohalolu muudab selle veel kaunimaks.</p><p>{event.productNote}</p><p className="invite-gift">{event.giftNote}</p><p className="invite-signature">Soojusega, Eline Beauty</p></section>
-      <section id="rsvp" className="invite-rsvp invite-section" aria-labelledby="rsvp-title"><div><p className="invite-kicker">RSVP</p><h2 id="rsvp-title">Kas näeme<br /><em>peol?</em></h2><p className="invite-muted">Ootame sind. Osalemise kinnitamise võimaluse lisame peagi.</p><p className="invite-rsvp-address">ELINE BEAUTY<br />{event.address}</p></div><RsvpForm /></section>
+      <section id="rsvp" className="invite-rsvp invite-section" aria-labelledby="rsvp-title"><div><p className="invite-kicker">RSVP</p><h2 id="rsvp-title">Kas näeme<br /><em>peol?</em></h2><p className="invite-muted">Anna meile teada, kas saad meiega tähistama tulla.</p><p className="invite-rsvp-address">ELINE BEAUTY<br />{event.address}</p></div><RsvpForm /></section>
     </main>
     <footer className="invite-footer"><div><Wordmark /><p>Ilusate kohtumisteni.</p></div><div><p className="invite-kicker">HOIAME ÜHENDUST</p>{event.instagramUrl ? <a className="invite-link" href={event.instagramUrl} target="_blank" rel="noopener noreferrer">Instagram ↗</a> : <p className="invite-note">Instagrami link lisandub peagi.</p>}{event.email ? <a className="invite-link" href={`mailto:${event.email}`}>{event.email}</a> : <p className="invite-note">Kontaktandmed täpsustamisel.</p>}<a className="invite-link" href="/">Eline Beauty avaleht ↗</a></div><p className="invite-footer-bottom">ELINE BEAUTY <span>ÜKS ILUS ALGUS.</span></p></footer>
   </div>;

@@ -49,10 +49,22 @@ Enne avaldamist täida `src/invitation/content.ts`: kontrollitud Instagrami URL 
 Tatari 25, Tallinn. Kutse on seni `noindex, nofollow`; eemalda see meta alles
 siis, kui kutse võib otsingusse jõuda. Kutset pole lisatud avalehe menüüsse ega sitemap'i.
 
-RSVP on märgitud demoks: `submitRsvp` ei salvesta ega saada andmeid. Backend'i
-lisamisel asenda see adapter päris päringuga ning lisa serveripoolne valideerimine,
-rämpspostikaitse, privaatsusteave ja tegelikud edu/vea olekud. Ära eemalda demomärget
-enne toimivat integratsiooni. Javascriptita on kogu kutse loetav; RSVP vajab JavaScripti.
+RSVP saadab JSON-päringu `/kutse/rsvp.php` kaudu aadressile **info@elinebeauty.ee**.
+Saatja vajab Zone'is PHP 8.1+ ja toimivat PHP `mail()` seadistust. SMTP/FTP paroole
+lähtekoodis pole ja uusi saladusi pole vaja. Saaja ning From on serveris fikseeritud.
+PHP kontrollib päritolu, sisendit, peidetud robotivälja ja päringu suurust ning lubab
+ühe päringu IP kohta minutis. Ajutine fail sisaldab ainult IP räsi ja ajatemplid;
+nimesid ega RSVP-vastuseid serverifaili ei salvestata. Kasutaja näeb, kuhu andmed lähevad.
+Õnnestumise teade tähendab, et server võttis kirja saatmiseks vastu, mitte postkasti
+kohalejõudmise kinnitust. Saatmisvea korral pakutakse e-posti teel vastamise võimalust.
+
+`npm run preview` on staatiline server ega käivita PHP-d: vormi saatmine ei tööta
+selles eelvaates. PHP testimiseks serveeri build PHP-ga, nt `php -S 127.0.0.1:4180 -t dist`;
+production-päritolu kontrolli ei tohi lokaalse testi jaoks serverikoodis nõrgendada.
+Laadi üles ka `dist/kutse/rsvp.php` ja veendu Zone'is, et PHP käivitatakse, mitte ei
+pakuta faili allalaadimiseks. Enne külalistele saatmist tee üks kontrollvastus ja
+kinnita selle saabumine `info@elinebeauty.ee` postkasti (ka rämpsposti kontroll).
+Zone'i ametlik juhend: https://www.zone.ee/help/kb/kirjade-saatmine-veebiserverist/
 
 | Fail | Sisu |
 | --- | --- |

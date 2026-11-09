@@ -27,3 +27,8 @@ Zone'i tegelikku `/kutse` vastust pole kontrollitud, sest avaldamist ega serveri
 mida olemasolev rekursiivne FTPS üleslaadija toetab.
 
 Viimane sisukontroll: 28. november, 18:00; esimese 50 osaleja kingikoti teade ning CHI ja Eudermi soodushindade teade olemas. Kõik brauseri- ja build-kontrollid korratud.
+
+RSVP integratsioon: info@elinebeauty.ee; päris PHP 8.4 endpoint'i testiti kohaliku
+SMTP-püüdjaga, väliseid kirju saatmata. Kontrollitud meetod, päritolu, sisendtüübid,
+päisesüstimise katse, robotiväli, suurusepiir, eduka kirja sisu/saaja ja sageduspiir.
+Live kohaletoimetamine on endiselt kontrollimata (Zone FTPS blokeering).
