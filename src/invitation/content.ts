@@ -3,10 +3,12 @@ export const invitation = {
   date: '28. november',
   time: '18:00',
   address: 'Tatari 25, Tallinn',
-  productNote: 'Avamispeol on CHI ja Eudermi tooted soodushindadega.',
+  productNote: 'Avamispeol on CHI ja Jeudermi tooted soodushindadega.',
   giftNote: 'Esimest 50 osalejat ootab kotikene kingitustega.',
-  instagramUrl: null as string | null,
-  email: null as string | null,
+  instagramUrl: 'https://www.instagram.com/the.eline.beauty/',
+  email: 'info@elinebeauty.ee',
+  phone: '53237173',
+  phoneLabel: '5323 7173',
 };
 
 export type Rsvp = { name: string; attending: boolean; plusOne: boolean };
