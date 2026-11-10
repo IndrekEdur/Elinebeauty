@@ -1,0 +1,69 @@
+name: Avalda ainult kutse
+on:
+  workflow_dispatch:
+    inputs:
+      confirm_invitation:
+        description: 'Luban ainult /htdocs/kutse avaldamise; /htdocs veebijuur on kinnitatud'
+        required: true
+        type: boolean
+        default: false
+permissions:
+  contents: read
+jobs:
+  build:
+    if: github.ref == 'refs/heads/main' && inputs.confirm_invitation == true
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci && npm run check && npm test && npm run build
+      - run: php -l dist/kutse/rsvp.php && python3 scripts/deploy_invitation.py prepare
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: invitation-only
+          path: .kutse-upload/
+          include-hidden-files: true
+          if-no-files-found: error
+  deploy:
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    environment:
+      name: production
+      url: https://elinebeauty.ee/kutse
+    concurrency:
+      group: zone-production
+      cancel-in-progress: false
+    env:
+      KUTSE_DEPLOY_APPROVED: ${{ inputs.confirm_invitation }}
+      # Per-run authorization for this scoped manual job; repository-wide lock unchanged.
+      ZONE_DEPLOY_ENABLED: ${{ inputs.confirm_invitation }}
+      ZONE_FTP_HOST: ${{ secrets.ZONE_FTP_HOST }}
+      ZONE_FTP_PORT: ${{ secrets.ZONE_FTP_PORT }}
+      ZONE_FTP_USERNAME: ${{ secrets.ZONE_FTP_USERNAME }}
+      ZONE_FTP_PASSWORD: ${{ secrets.ZONE_FTP_PASSWORD }}
+      ZONE_FTP_TARGET_PATH: /htdocs
+      ZONE_CONFIRMED_FTP_TARGET_PATH: /htdocs
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: invitation-only
+          path: .kutse-upload
+      - run: python3 scripts/deploy_invitation.py backup
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: invitation-backup-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .kutse-backup/
+          include-hidden-files: true
+          retention-days: 30
+          if-no-files-found: error
+      - run: python3 scripts/deploy_invitation.py deploy

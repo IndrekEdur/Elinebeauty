@@ -3,6 +3,8 @@ dist/
 .tools/
 .qa/
 .deployment-backup/
+.kutse-upload/
+.kutse-backup/
 __pycache__/
 .env
 .env.*

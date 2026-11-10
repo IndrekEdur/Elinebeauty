@@ -28,6 +28,44 @@ npm run preview
 
 ## Failid ja sisu muutmine
 
+### Avamispeo kutse `/kutse`
+
+Kutse on avalehest eraldatud Vite'i mitmeleheline sisenemispunkt (`kutse/index.html`).
+`src/invitation/` sisaldab ainult kutse komponente, stiile, kohalike fontide importi ja
+muudetavat ürituse sisu (`content.ts`). Avalehe komponendid ja stiilid jäävad samaks.
+Build eelrenderdab mõlemad lehed: `dist/index.html` ja `dist/kutse/index.html`.
+Pildid ja fondid on kohalikud; kutse taaskasutab senist tekstilogo. Kutse on fotota.
+
+Eelvaade: `npm ci`, `npm run build`, `npm run preview`, seejärel
+`http://127.0.0.1:4173/kutse`. Arenduseks `npm run dev` ja `/kutse`.
+Vite'i lokaalne middleware suunab `/kutse` → `/kutse/`, nagu staatilise serveri
+tavapärane kataloogisuunamine. Zone'is teenindab päris `kutse/` kataloog oma
+`index.html` faili: kliendipoolset ruuterit, Node-serverit ega SPA fallback'i pole vaja.
+Praegune FTPS-skript laadib rekursiivselt üles ka selle kataloogi. Töövoogu ega
+Zone'i seadeid pole muudetud. Serveri tegelik DirectoryIndex/kataloogisuunamine
+tuleb kinnitada hilisema lubatud avaldamise käigus; serveriga pole ühendust loodud.
+
+Enne avaldamist täida `src/invitation/content.ts`: kontrollitud Instagrami URL ja e-post. Aadress on tellija antud
+Tatari 25, Tallinn. Kutse on seni `noindex, nofollow`; eemalda see meta alles
+siis, kui kutse võib otsingusse jõuda. Kutset pole lisatud avalehe menüüsse ega sitemap'i.
+
+RSVP saadab JSON-päringu `/kutse/rsvp.php` kaudu aadressile **info@elinebeauty.ee**.
+Saatja vajab Zone'is PHP 8.1+ ja toimivat PHP `mail()` seadistust. SMTP/FTP paroole
+lähtekoodis pole ja uusi saladusi pole vaja. Saaja ning From on serveris fikseeritud.
+PHP kontrollib päritolu, sisendit, peidetud robotivälja ja päringu suurust ning lubab
+ühe päringu IP kohta minutis. Ajutine fail sisaldab ainult IP räsi ja ajatemplid;
+nimesid ega RSVP-vastuseid serverifaili ei salvestata. Kasutaja näeb, kuhu andmed lähevad.
+Õnnestumise teade tähendab, et server võttis kirja saatmiseks vastu, mitte postkasti
+kohalejõudmise kinnitust. Saatmisvea korral pakutakse e-posti teel vastamise võimalust.
+
+`npm run preview` on staatiline server ega käivita PHP-d: vormi saatmine ei tööta
+selles eelvaates. PHP testimiseks serveeri build PHP-ga, nt `php -S 127.0.0.1:4180 -t dist`;
+production-päritolu kontrolli ei tohi lokaalse testi jaoks serverikoodis nõrgendada.
+Laadi üles ka `dist/kutse/rsvp.php` ja veendu Zone'is, et PHP käivitatakse, mitte ei
+pakuta faili allalaadimiseks. Enne külalistele saatmist tee üks kontrollvastus ja
+kinnita selle saabumine `info@elinebeauty.ee` postkasti (ka rämpsposti kontroll).
+Zone'i ametlik juhend: https://www.zone.ee/help/kb/kirjade-saatmine-veebiserverist/
+
 | Fail | Sisu |
 | --- | --- |
 | `src/content.ts` | Teenused, hinnakirja näidisread, spetsialistid, galerii, kontaktid, broneerimine |
@@ -146,3 +184,21 @@ Codexi pilvevõimaluste olemasolu sõltub kontost ja ligipääsust. Pilveühendu
 - [Python: FTP_TLS](https://docs.python.org/3/library/ftplib.html#ftplib.FTP_TLS)
 - [GitHub: deployments ja environments](https://docs.github.com/en/actions/reference/workflows-and-actions/deployments-and-environments)
 - [OpenAI: Codex Cloud](https://developers.openai.com/codex/cloud/)
+
+## Ainult kutse avaldamine
+
+Omanik kinnitas `/htdocs` veebijuure. `.github/workflows/invitation-deploy.yml`
+on eraldi käsitsi käivitatav `Avalda ainult kutse` töövoog main-harult. Märgi
+kinnitus ja kinnita production-keskkonna töö. See käsitsi antud luba kehtib ainult
+selle jooksu kutsefailidele; repository `ZONE_DEPLOY_ENABLED` ei muudeta.
+
+`scripts/deploy_invitation.py` pakib kõik ressursid `kutse/assets/` alla ning lubab
+üles laadida ainult `kutse/` faile. Globaalset avaldamislukku ega Zone saladusi ei
+muudeta. Sihttee on kasutaja kinnitatud `/htdocs`, mida võrreldakse PWD-ga.
+Enne kirjutamist varundatakse avaleht ja kõik asendatavad kutsefailid GitHubi
+artefakti; muutused pärast varundust peatavad töö. Kutse HTML laaditakse viimasena.
+Avalehe samasust kontrollitakse enne ja pärast; serverifaile ei kustutata.
+
+Tavaline main-push'i avaldamine laeb üles kogu saidi. Kutse PR tuleb ühendada
+`[skip actions]` merge-teatega pärast PR-kontrollide läbimist ning käivitada ainult
+uus kutse töövoog. Ära käivita kogu saidi deploy'd, sest live-avaleht on main-ist erinev.
