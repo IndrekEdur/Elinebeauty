@@ -184,3 +184,21 @@ Codexi pilvevõimaluste olemasolu sõltub kontost ja ligipääsust. Pilveühendu
 - [Python: FTP_TLS](https://docs.python.org/3/library/ftplib.html#ftplib.FTP_TLS)
 - [GitHub: deployments ja environments](https://docs.github.com/en/actions/reference/workflows-and-actions/deployments-and-environments)
 - [OpenAI: Codex Cloud](https://developers.openai.com/codex/cloud/)
+
+## Ainult kutse avaldamine
+
+Omanik kinnitas `/htdocs` veebijuure. `.github/workflows/invitation-deploy.yml`
+on eraldi käsitsi käivitatav `Avalda ainult kutse` töövoog main-harult. Märgi
+kinnitus ja kinnita production-keskkonna töö. See käsitsi antud luba kehtib ainult
+selle jooksu kutsefailidele; repository `ZONE_DEPLOY_ENABLED` ei muudeta.
+
+`scripts/deploy_invitation.py` pakib kõik ressursid `kutse/assets/` alla ning lubab
+üles laadida ainult `kutse/` faile. Globaalset avaldamislukku ega Zone saladusi ei
+muudeta. Sihttee on kasutaja kinnitatud `/htdocs`, mida võrreldakse PWD-ga.
+Enne kirjutamist varundatakse avaleht ja kõik asendatavad kutsefailid GitHubi
+artefakti; muutused pärast varundust peatavad töö. Kutse HTML laaditakse viimasena.
+Avalehe samasust kontrollitakse enne ja pärast; serverifaile ei kustutata.
+
+Tavaline main-push'i avaldamine laeb üles kogu saidi. Kutse PR tuleb ühendada
+`[skip actions]` merge-teatega pärast PR-kontrollide läbimist ning käivitada ainult
+uus kutse töövoog. Ära käivita kogu saidi deploy'd, sest live-avaleht on main-ist erinev.

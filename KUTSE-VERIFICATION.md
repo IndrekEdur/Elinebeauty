@@ -32,3 +32,7 @@ RSVP integratsioon: info@elinebeauty.ee; päris PHP 8.4 endpoint'i testiti kohal
 SMTP-püüdjaga, väliseid kirju saatmata. Kontrollitud meetod, päritolu, sisendtüübid,
 päisesüstimise katse, robotiväli, suurusepiir, eduka kirja sisu/saaja ja sageduspiir.
 Live kohaletoimetamine on endiselt kontrollimata (Zone FTPS blokeering).
+
+Kutse eraldi avaldamine: lisatud 3 testi ressursside eraldamisele, avalehe
+puutumatusele ja varunduse järel muutunud failide blokeerimisele. Kõik 27 testi
+läbisid. FTPS lugemiskontroll #3 läbis päris serveris ning omanik kinnitas /htdocs.
