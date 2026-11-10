@@ -117,7 +117,9 @@ def report(label, value):
 
 def list_directory(client):
     entries = []
-    for name, facts in client.mlsd(facts=["type", "size"]):
+    # Use the server's default MLSD facts without sending OPTS MLST.
+    # The read-only command allowlist intentionally excludes OPTS.
+    for name, facts in client.mlsd():
         if len(entries) >= 100:
             raise ConfigError("Kataloog sisaldab üle 100 kirje; kontrolli õiget FTP kasutaja algkataloogi.")
         entries.append({"name": name, "type": facts.get("type"), "size": facts.get("size")})

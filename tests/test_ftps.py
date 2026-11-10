@@ -40,7 +40,7 @@ class FakeFTP:
             raise ftplib.error_perm("550 Missing directory")
         self.current = target
 
-    def mlsd(self, facts):
+    def mlsd(self, facts=None):
         self.commands.append(("MLSD",))
         return iter([("htdocs", {"type": "dir"})] if self.current == "/" else [("index.html", {"type": "file", "size": "9"})])
 
@@ -101,6 +101,14 @@ class ConfigTests(unittest.TestCase):
 
 
 class TLSTests(unittest.TestCase):
+    def test_directory_listing_never_sends_opts(self):
+        client = ftps.ReadOnlyFTPS(context=ssl.create_default_context())
+        with patch.object(client, "sendcmd", side_effect=AssertionError("Unexpected OPTS")), \
+             patch.object(client, "retrlines", side_effect=lambda cmd, callback: callback("type=dir;size=0; htdocs")) as listing:
+            self.assertEqual(ftps.list_directory(client), [{"name": "htdocs", "type": "dir", "size": "0"}])
+        listing.assert_called_once()
+        self.assertEqual(listing.call_args.args[0], "MLSD")
+
     def test_verified_tls_before_credentials_and_protected_data(self):
         client = Mock()
         with patch.object(ftps, "VerifiedFTPS", return_value=client) as constructor:
