@@ -3,7 +3,7 @@ export const invitation = {
   date: '28. november',
   time: '18:00',
   address: 'Tatari 25, Tallinn',
-  productNote: 'Avamispeol on CHI ja Jeudermi tooted soodushindadega.',
+  productNote: 'Avamispeol on CHI, Jeudermi ja Nine Yardsi tooted soodushindadega.',
   giftNote: 'Esimest 50 osalejat ootab kotikene kingitustega.',
   instagramUrl: 'https://www.instagram.com/the.eline.beauty/',
   email: 'info@elinebeauty.ee',
@@ -11,7 +11,7 @@ export const invitation = {
   phoneLabel: '5323 7173',
 };
 
-export type Rsvp = { name: string; attending: boolean; plusOne: boolean };
+export type Rsvp = { name: string; attending: boolean };
 export async function submitRsvp(response: Rsvp, website: string): Promise<void> {
   const result = await fetch('/kutse/rsvp.php', {
     method: 'POST',
