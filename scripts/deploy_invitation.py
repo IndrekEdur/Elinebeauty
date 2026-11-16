@@ -15,12 +15,13 @@ except ModuleNotFoundError:
 def prepare(source=Path('dist'), target=Path('.kutse-upload')):
     if target.exists():
         raise ftps.ConfigError('Kutse ajutine pakikataloog peab olema uus.')
-    if not (source / 'kutse/index.html').is_file() or not (source / 'kutse/rsvp.php').is_file():
-        raise ftps.ConfigError('Kutse HTML või RSVP saatja puudub.')
+    invitation_files = ('index.html', 'rsvp.php', 'jagamis-kaart.jpg')
+    if not all((source / 'kutse' / name).is_file() for name in invitation_files):
+        raise ftps.ConfigError('Kutse HTML, RSVP saatja või jagamispilt puudub.')
     # Keep every asset in the invitation's namespace, including local fonts.
     shutil.copytree(source / 'assets', target / 'kutse/assets')
-    shutil.copy2(source / 'kutse/index.html', target / 'kutse/index.html')
-    shutil.copy2(source / 'kutse/rsvp.php', target / 'kutse/rsvp.php')
+    for name in invitation_files:
+        shutil.copy2(source / 'kutse' / name, target / 'kutse' / name)
     for path in target.rglob('*'):
         if path.suffix in ('.html', '.css', '.js'):
             path.write_text(path.read_text(encoding='utf-8').replace('/assets/', '/kutse/assets/'), encoding='utf-8')
