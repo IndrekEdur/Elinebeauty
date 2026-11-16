@@ -20,12 +20,11 @@ $raw = file_get_contents('php://input', false, null, 0, 4097);
 if ($raw === false || strlen($raw) > 4096) respond(413, false);
 $data = json_decode($raw, true);
 if (!is_array($data) || !is_string($data['name'] ?? null)
-    || !is_bool($data['attending'] ?? null) || !is_bool($data['plusOne'] ?? null)
+    || !is_bool($data['attending'] ?? null)
     || !is_string($data['website'] ?? null)) respond(422, false);
 $name = trim($data['name']);
 if ($name === '' || strlen($name) > 480 || preg_match('//u', $name) !== 1
-    || preg_match('/[\x00-\x1F\x7F]/u', $data['name']) || preg_match_all('/./u', $name) > 120
-    || (!$data['attending'] && $data['plusOne'])) respond(422, false);
+    || preg_match('/[\x00-\x1F\x7F]/u', $data['name']) || preg_match_all('/./u', $name) > 120) respond(422, false);
 if ($data['website'] !== '') respond(422, false);
 
 // One locked, bounded temp file; stores only hashed IPs and short-lived timestamps.
@@ -48,8 +47,7 @@ fclose($lock);
 
 $body = "Eline Beauty avamispidu — 28. november kell 18:00\n\n"
     . "Nimi: $name\n"
-    . 'Osaleb: ' . ($data['attending'] ? 'Jah' : 'Ei') . "\n"
-    . 'Kaaslane: ' . ($data['plusOne'] ? 'Jah' : 'Ei') . "\n";
+    . 'Osaleb: ' . ($data['attending'] ? 'Jah' : 'Ei') . "\n";
 $sent = @mail('info@elinebeauty.ee', 'Eline Beauty avamispidu - RSVP', $body, [
     'From' => 'Eline Beauty <info@elinebeauty.ee>',
     'MIME-Version' => '1.0',
