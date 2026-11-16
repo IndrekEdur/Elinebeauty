@@ -52,6 +52,7 @@ class InvitationTests(unittest.TestCase):
             (source / 'kutse').mkdir()
             (source / 'kutse/index.html').write_text('<script src="/assets/app.js"></script>')
             (source / 'kutse/rsvp.php').write_text('<?php echo 1;')
+            (source / 'kutse/jagamis-kaart.jpg').write_bytes(b'sharing image')
             (source / 'index.html').write_text('DO NOT DEPLOY')
             root = deploy.prepare(source, base / 'package')
             self.assertIn('/kutse/assets/app.js', (root / 'kutse/index.html').read_text())
@@ -62,6 +63,7 @@ class InvitationTests(unittest.TestCase):
             deploy.upload(client, root, saved)
             self.assertTrue(all(name.startswith('kutse/') for name in client.writes))
             self.assertEqual(client.writes[-1], 'kutse/index.html')
+            self.assertEqual(client.data['/htdocs/kutse/jagamis-kaart.jpg'], b'sharing image')
             self.assertEqual(client.data['/htdocs/index.html'], b'LIVE HOMEPAGE')
 
     def test_changed_homepage_blocks_all_writes(self):
